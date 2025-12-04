@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tirage couleurs soirée</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111827;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      padding: 1.5rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      border: 1px solid #1f2937;
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    textarea, input {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 0.5rem;
+      border: 1px solid #374151;
+      padding: 0.5rem 0.75rem;
+      background: #020617;
+      color: #e5e7eb;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+      margin-bottom: 0.75rem;
+    }
+
+    input {
+      min-height: auto;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px #6366f1;
+    }
+
+    .small-muted {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: -0.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #111827;
+      border: 1px solid #374151;
+    }
+
+    .flex {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .flex-2 {
+      flex: 1 1 250px;
+    }
+
+    .result-box {
+      margin-top: 0.75rem;
+      padding: 0.85rem 1rem;
+      border-radius: 0.75rem;
+      background: #030712;
+      border: 1px solid #1f2937;
+      font-size: 0.95rem;
+    }
+
+    .result-highlight {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #111827;
+      border: 1px solid #374151;
+      margin-right: 0.25rem;
+      margin-top: 0.2rem;
+    }
+
+    .badge-good {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+
+    .badge-warn {
+      border-color: #eab308;
+      color: #eab308;
+    }
+
+    .badge-bad {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .error {
+      color: #fca5a5;
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .success {
+      color: #bbf7d0;
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .color-preview {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-left: 0.3rem;
+    }
+
+    .fade-out {
+      animation: fadeOut 1s ease forwards;
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tirage secret des couleurs</h1>
+    <p style="text-align:center;font-size:0.9rem;color:#9ca3af;">
+      Tout se passe dans ce navigateur, aucune donnée envoyée sur un serveur.
+    </p>
+
+    <!-- 1. Configuration & tirage -->
+    <div class="card">
+      <h2>1. Préparer le tirage</h2>
+      <p class="small-muted">
+        ⚠️ Les 12 premiers invités utilisés pour l’aléatoire sont les 12 premiers noms
+        en lisant d’abord la liste des hommes puis la liste des femmes.
+      </p>
+      <div class="flex">
+        <div class="flex-2">
+          <label for="hommes">Liste des hommes</label>
+          <textarea id="hommes" placeholder="Un homme par ligne&#10;Ex :&#10;Alex&#10;Bruno&#10;Carlos"></textarea>
+        </div>
+        <div class="flex-2">
+          <label for="femmes">Liste des femmes</label>
+          <textarea id="femmes" placeholder="Une femme par ligne&#10;Ex :&#10;Alice&#10;Chloé&#10;Diane"></textarea>
+        </div>
+      </div>
+
+      <label for="couleurs">Liste des couleurs (monochromes)</label>
+      <textarea id="couleurs" placeholder="Une couleur par ligne">Rouge Vif
+Bleu Électrique
+Vert Émeraude
+Jaune Soleil
+Orange
+Rose Fushia
+Violet Profond
+Noir
+Blanc Pur
+Argenté / Gris Métallique</textarea>
+      <div class="small-muted">
+        Pour les invités au-delà de 12, les couleurs seront attribuées dans cet ordre, par paire de 2.
+        Si la liste est épuisée, le script créera automatiquement « Couleur 11 », « Couleur 12 », etc.
+      </div>
+
+      <button id="btn-generer">🔮 Générer le tirage</button>
+
+      <div id="generation-info" class="result-box" style="display:none;"></div>
+    </div>
+
+    <!-- 2. Révélation individuelle -->
+    <div class="card">
+      <h2>2. Révéler sa couleur (invité)</h2>
+      <p class="small-muted">
+        Chaque invité tape son prénom (ou nom) exactement comme dans les listes.<br>
+        La couleur est révélée uniquement pour cette personne puis oubliée.
+      </p>
+
+      <label for="nom-invite">Prénom (ou nom complet)</label>
+      <input id="nom-invite" type="text" placeholder="Ex : Alex" />
+      <button id="btn-reveler" disabled>👀 Voir ma couleur</button>
+      <button id="btn-reset" class="btn-secondary" style="margin-left:0.5rem;">♻️ Réinitialiser le tirage</button>
+
+      <div id="revelation-zone" class="result-box" style="display:none;margin-top:0.75rem;"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- Utilitaires ---
+
+    function nettoyerListeBrute(texte) {
+      return texte
+        .split(/\r?\n/)
+        .map(l => l.trim())
+        .filter(l => l.length > 0);
+    }
+
+    function shuffle(array) {
+      // Fisher-Yates + crypto pour un tirage non biaisé
+      for (let i = array.length - 1; i > 0; i--) {
+        const rand = new Uint32Array(1);
+        crypto.getRandomValues(rand);
+        const j = rand[0] % (i + 1);
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function randomFromArray(array) {
+      const rand = new Uint32Array(1);
+      crypto.getRandomValues(rand);
+      const idx = rand[0] % array.length;
+      return array[idx];
+    }
+
+    function normaliserNom(nom) {
+      return nom.trim().toLowerCase();
+    }
+
+    // --- Clés localStorage ---
+    const LS_KEY_ASSIGN = 'tirageCouleurs_assignations';
+    const LS_KEY_ACTIF  = 'tirageCouleurs_actif';
+    const LS_KEY_META   = 'tirageCouleurs_meta';
+    const LS_KEY_CFG    = 'tirageCouleurs_config';
+
+    // --- État global ---
+    let assignations = {};       // nom normalisé -> { nomOriginal, couleur }
+    let tirageActif = false;
+    let metaTirage = null;       // { totalInvites, coreCount, nbHF, nbUnisexes, nbOrphelins, nbExtraPairs, nbExtraOrphelins }
+
+    const hommesEl = document.getElementById('hommes');
+    const femmesEl = document.getElementById('femmes');
+    const couleursEl = document.getElementById('couleurs');
+    const btnGenerer = document.getElementById('btn-generer');
+    const infoGen = document.getElementById('generation-info');
+    const nomInviteEl = document.getElementById('nom-invite');
+    const btnReveler = document.getElementById('btn-reveler');
+    const btnReset = document.getElementById('btn-reset');
+    const zoneRevelation = document.getElementById('revelation-zone');
+
+    // --- Sauvegarde / chargement localStorage ---
+
+    function sauvegarderTirage() {
+      try {
+        localStorage.setItem(LS_KEY_ASSIGN, JSON.stringify(assignations));
+        localStorage.setItem(LS_KEY_ACTIF, tirageActif ? '1' : '0');
+        if (metaTirage) {
+          localStorage.setItem(LS_KEY_META, JSON.stringify(metaTirage));
+        }
+        const cfg = {
+          hommes: hommesEl.value,
+          femmes: femmesEl.value,
+          couleurs: couleursEl.value
+        };
+        localStorage.setItem(LS_KEY_CFG, JSON.stringify(cfg));
+      } catch (e) {
+        console.warn('Impossible de sauvegarder dans localStorage', e);
+      }
+    }
+
+    function chargerTirage() {
+      try {
+        const actifStr = localStorage.getItem(LS_KEY_ACTIF);
+        if (actifStr === '1') {
+          const assignStr = localStorage.getItem(LS_KEY_ASSIGN);
+          const metaStr = localStorage.getItem(LS_KEY_META);
+          const cfgStr = localStorage.getItem(LS_KEY_CFG);
+
+          if (assignStr) {
+            assignations = JSON.parse(assignStr);
+            tirageActif = true;
+          }
+          if (metaStr) {
+            metaTirage = JSON.parse(metaStr);
+          }
+          if (cfgStr) {
+            const cfg = JSON.parse(cfgStr);
+            if (typeof cfg.hommes === 'string') hommesEl.value = cfg.hommes;
+            if (typeof cfg.femmes === 'string') femmesEl.value = cfg.femmes;
+            if (typeof cfg.couleurs === 'string') couleursEl.value = cfg.couleurs;
+          }
+
+          if (tirageActif) {
+            btnReveler.disabled = false;
+            afficherInfoGenerationRecharge();
+          }
+        }
+      } catch (e) {
+        console.warn('Impossible de charger depuis localStorage', e);
+      }
+    }
+
+    function effacerTirage() {
+      assignations = {};
+      tirageActif = false;
+      metaTirage = null;
+      try {
+        localStorage.removeItem(LS_KEY_ASSIGN);
+        localStorage.removeItem(LS_KEY_ACTIF);
+        localStorage.removeItem(LS_KEY_META);
+        localStorage.removeItem(LS_KEY_CFG);
+      } catch (e) {
+        console.warn('Impossible de nettoyer localStorage', e);
+      }
+    }
+
+    // --- Affichage info tirage ---
+
+    function afficherInfoGeneration(meta) {
+      metaTirage = meta;
+      const {
+        totalInvites,
+        coreCount,
+        nbHF,
+        nbUnisexes,
+        nbOrphelins,
+        nbExtraPairs,
+        nbExtraOrphelins
+      } = meta;
+
+      let html = '';
+      html += `<div class="result-highlight">Tirage prêt ✅</div>`;
+      html += `<div>${totalInvites} invité(s) au total.</div>`;
+      html += `<div>${coreCount} invité(s) en tirage aléatoire (jusqu'au 12e).</div>`;
+      if (totalInvites > coreCount) {
+        html += `<div>${totalInvites - coreCount} invité(s) en mode couleurs fixes (après 12).</div>`;
+      }
+
+      html += `<div style="margin-top:0.4rem;">`;
+      html += `<span class="badge badge-good">${nbHF} paire(s) H/F (aléatoires)</span>`;
+      html += `<span class="badge badge-warn">${nbUnisexes} paire(s) unisexes (aléatoires)</span>`;
+      html += `<span class="badge ${nbOrphelins ? 'badge-bad' : 'badge-good'}">${nbOrphelins} orphelin(s) (aléatoires)</span>`;
+      if (nbExtraPairs > 0 || nbExtraOrphelins > 0) {
+        html += `<span class="badge badge-good">${nbExtraPairs} paire(s) fixes après 12</span>`;
+        html += `<span class="badge ${nbExtraOrphelins ? 'badge-warn' : 'badge-good'}">${nbExtraOrphelins} orphelin(s) après 12</span>`;
+      }
+      html += `</div>`;
+
+      html += `<div class="small-muted" style="margin-top:0.5rem;">
+        Les couleurs des 12 premiers invités sont tirées au sort, avec priorité aux paires H/F.<br>
+        Au-delà de 12, les couleurs sont attribuées séquentiellement par paire de 2
+        en suivant l'ordre de la liste de couleurs.
+      </div>`;
+
+      infoGen.style.display = 'block';
+      infoGen.innerHTML = html;
+    }
+
+    function afficherInfoGenerationRecharge() {
+      if (!metaTirage) {
+        infoGen.style.display = 'block';
+        infoGen.innerHTML = `
+          <div class="result-highlight">Tirage chargé ✅</div>
+          <div>${Object.keys(assignations).length} invité(s) encore non révélés.</div>
+          <div class="small-muted" style="margin-top:0.5rem;">
+            Ce tirage vient d’un précédent lancement. Les couleurs restent les mêmes
+            qu’avant le rechargement de la page.
+          </div>
+        `;
+        return;
+      }
+
+      const {
+        totalInvites,
+        coreCount,
+        nbHF,
+        nbUnisexes,
+        nbOrphelins,
+        nbExtraPairs,
+        nbExtraOrphelins
+      } = metaTirage;
+
+      let html = '';
+      html += `<div class="result-highlight">Tirage chargé ✅</div>`;
+      html += `<div>${totalInvites} invité(s) au total à l’origine.</div>`;
+      html += `<div>${Object.keys(assignations).length} invité(s) encore non révélés.</div>`;
+      html += `<div>${coreCount} invité(s) en tirage aléatoire (jusqu'au 12e).</div>`;
+      if (totalInvites > coreCount) {
+        html += `<div>${totalInvites - coreCount} invité(s) en mode couleurs fixes (après 12).</div>`;
+      }
+
+      html += `<div style="margin-top:0.4rem;">`;
+      html += `<span class="badge badge-good">${nbHF} paire(s) H/F (aléatoires)</span>`;
+      html += `<span class="badge badge-warn">${nbUnisexes} paire(s) unisexes (aléatoires)</span>`;
+      html += `<span class="badge ${nbOrphelins ? 'badge-bad' : 'badge-good'}">${nbOrphelins} orphelin(s) (aléatoires)</span>`;
+      if (nbExtraPairs > 0 || nbExtraOrphelins > 0) {
+        html += `<span class="badge badge-good">${nbExtraPairs} paire(s) fixes après 12</span>`;
+        html += `<span class="badge ${nbExtraOrphelins ? 'badge-warn' : 'badge-good'}">${nbExtraOrphelins} orphelin(s) après 12</span>`;
+      }
+      html += `</div>`;
+
+      html += `<div class="small-muted" style="margin-top:0.5rem;">
+        Tirage récupéré depuis le stockage du navigateur : recharger la page ne change pas les couleurs.
+      </div>`;
+
+      infoGen.style.display = 'block';
+      infoGen.innerHTML = html;
+    }
+
+    // --- Générer le tirage ---
+    btnGenerer.addEventListener('click', () => {
+      const hommesBrut = nettoyerListeBrute(hommesEl.value);
+      const femmesBrut = nettoyerListeBrute(femmesEl.value);
+      const couleursBrut = nettoyerListeBrute(couleursEl.value);
+
+      zoneRevelation.style.display = 'none';
+      zoneRevelation.innerHTML = '';
+
+      if (hommesBrut.length === 0 && femmesBrut.length === 0) {
+        infoGen.style.display = 'block';
+        infoGen.innerHTML = '<span class="error">⚠️ Tu dois saisir au moins un homme ou une femme.</span>';
+        tirageActif = false;
+        btnReveler.disabled = true;
+        assignations = {};
+        effacerTirage();
+        return;
+      }
+
+      if (couleursBrut.length === 0) {
+        infoGen.style.display = 'block';
+        infoGen.innerHTML = '<span class="error">⚠️ Tu dois saisir au moins une couleur.</span>';
+        tirageActif = false;
+        btnReveler.disabled = true;
+        assignations = {};
+        effacerTirage();
+        return;
+      }
+
+      // Construire la liste complète des invités, dans l'ordre :
+      // d'abord tous les hommes puis toutes les femmes.
+      const hommes = hommesBrut.map(n => ({ nom: n, genre: 'H' }));
+      const femmes = femmesBrut.map(n => ({ nom: n, genre: 'F' }));
+      const tous = [...hommes, ...femmes];
+      const totalInvites = tous.length;
+
+      const coreCount = Math.min(12, totalInvites);
+      const coreGuests = tous.slice(0, coreCount);
+      const extraGuests = tous.slice(coreCount);
+
+      // --- 1) Tirage aléatoire pour les 12 premiers (ou moins) ---
+
+      const hommesCore = coreGuests.filter(g => g.genre === 'H').map(g => g.nom);
+      const femmesCore = coreGuests.filter(g => g.genre === 'F').map(g => g.nom);
+
+      const hommesMelanges = shuffle([...hommesCore]);
+      const femmesMelangees = shuffle([...femmesCore]);
+
+      const unitesCore = []; // {membres:[nom1, nom2?], type:'HF'|'HH'|'FF'|'UNISEXE'|'ORPHELIN'}
+      let nbHF = 0;
+      let nbUnisexes = 0;
+      let nbOrphelins = 0;
+
+      // Paires H/F tant que possible
+      while (hommesMelanges.length > 0 && femmesMelangees.length > 0) {
+        const h = hommesMelanges.pop();
+        const f = femmesMelangees.pop();
+        unitesCore.push({ membres: [h, f], type: 'HF' });
+        nbHF++;
+      }
+
+      // Reste éventuel : paires unisexes + orphelin
+      let restants = [];
+      const restantsH = [...hommesMelanges];
+      const restantsF = [...femmesMelangees];
+      restants = restants.concat(restantsH).concat(restantsF);
+      shuffle(restants);
+
+      while (restants.length >= 2) {
+        const a = restants.pop();
+        const b = restants.pop();
+        let type = 'UNISEXE';
+        if (hommesCore.includes(a) && hommesCore.includes(b)) type = 'HH';
+        else if (femmesCore.includes(a) && femmesCore.includes(b)) type = 'FF';
+        unitesCore.push({ membres: [a, b], type });
+        nbUnisexes++;
+      }
+
+      if (restants.length === 1) {
+        const seul = restants.pop();
+        unitesCore.push({ membres: [seul], type: 'ORPHELIN' });
+        nbOrphelins++;
+      }
+
+      // --- 2) Invités supplémentaires (au-delà de 12) : couleurs fixes par paire ---
+
+      const unitesExtra = []; // {membres:[nom1, nom2?], type:'EXTRA_PAIR'|'EXTRA_ORPHELIN'}
+      let nbExtraPairs = 0;
+      let nbExtraOrphelins = 0;
+
+      for (let i = 0; i < extraGuests.length; i += 2) {
+        const g1 = extraGuests[i];
+        const g2 = extraGuests[i + 1];
+        if (g2) {
+          unitesExtra.push({ membres: [g1.nom, g2.nom], type: 'EXTRA_PAIR' });
+          nbExtraPairs++;
+        } else {
+          unitesExtra.push({ membres: [g1.nom], type: 'EXTRA_ORPHELIN' });
+          nbExtraOrphelins++;
+        }
+      }
+
+      // --- 3) Assignation des couleurs ---
+
+      assignations = {};
+
+      // 3a) Couleurs aléatoires pour les 12 premiers
+      unitesCore.forEach(unite => {
+        const couleur = randomFromArray(couleursBrut);
+        unite.membres.forEach(nom => {
+          assignations[normaliserNom(nom)] = {
+            nomOriginal: nom,
+            couleur
+          };
+        });
+      });
+
+      // 3b) Couleurs fixes séquentielles pour les suivants
+      let indexPair = 0; // index de paire pour les couleurs fixes
+
+      unitesExtra.forEach(unite => {
+        let couleur;
+        // On utilise 1 couleur par unité (paire ou orphelin), en avançant l'index
+        if (indexPair < couleursBrut.length) {
+          couleur = couleursBrut[indexPair];
+        } else {
+          const numAuto = indexPair + 1;
+          couleur = `Couleur ${numAuto}`;
+        }
+        indexPair++;
+
+        unite.membres.forEach(nom => {
+          assignations[normaliserNom(nom)] = {
+            nomOriginal: nom,
+            couleur
+          };
+        });
+      });
+
+      tirageActif = true;
+      btnReveler.disabled = false;
+
+      // 4) Meta et affichage
+      const meta = {
+        totalInvites,
+        coreCount,
+        nbHF,
+        nbUnisexes,
+        nbOrphelins,
+        nbExtraPairs,
+        nbExtraOrphelins
+      };
+      afficherInfoGeneration(meta);
+
+      // 5) Sauvegarde pour résister aux rechargements
+      sauvegarderTirage();
+
+      nomInviteEl.value = '';
+    });
+
+    // --- Révéler la couleur pour un invité ---
+    btnReveler.addEventListener('click', () => {
+      if (!tirageActif) {
+        zoneRevelation.style.display = 'block';
+        zoneRevelation.innerHTML = '<span class="error">⚠️ Aucun tirage actif. Demande à l’organisateur de lancer le tirage.</span>';
+        return;
+      }
+
+      const saisi = nomInviteEl.value.trim();
+      if (saisi.length === 0) {
+        zoneRevelation.style.display = 'block';
+        zoneRevelation.innerHTML = '<span class="error">⚠️ Merci de saisir ton prénom / nom.</span>';
+        return;
+      }
+
+      const cle = normaliserNom(saisi);
+      const data = assignations[cle];
+
+      if (!data) {
+        zoneRevelation.style.display = 'block';
+        zoneRevelation.innerHTML = `<span class="error">⚠️ Ce nom n’est pas dans la liste, ou bien la couleur a déjà été révélée et oubliée.</span>`;
+        return;
+      }
+
+      const couleur = data.couleur;
+      const nomOriginal = data.nomOriginal;
+
+      zoneRevelation.style.display = 'block';
+      zoneRevelation.innerHTML = `
+        <div class="result-highlight">Ta couleur pour la soirée</div>
+        <div style="margin-bottom:0.4rem;">Bonjour <strong>${nomOriginal}</strong> 👋</div>
+        <div>Ta couleur secrète est :</div>
+        <div style="margin-top:0.5rem; font-size:1.4rem; font-weight:800;">
+          ${couleur}
+          <span class="color-preview">●</span>
+        </div>
+        <div class="small-muted" style="margin-top:0.6rem;">
+          Une fois révélée, ta couleur est oubliée de ce navigateur.<br>
+          Recharger la page ne change pas les couleurs des autres invités.
+        </div>
+      `;
+
+      // Autodestruction : on retire l’assignation de la mémoire
+      delete assignations[cle];
+      sauvegarderTirage();
+
+      setTimeout(() => {
+        zoneRevelation.classList.add('fade-out');
+        setTimeout(() => {
+          zoneRevelation.style.display = 'none';
+          zoneRevelation.classList.remove('fade-out');
+          zoneRevelation.innerHTML = '';
+        }, 900);
+      }, 15000);
+    });
+
+    // --- Reset complet du tirage ---
+    btnReset.addEventListener('click', () => {
+      assignations = {};
+      tirageActif = false;
+      metaTirage = null;
+      effacerTirage();
+      btnReveler.disabled = true;
+      infoGen.style.display = 'none';
+      zoneRevelation.style.display = 'none';
+      zoneRevelation.innerHTML = '';
+      nomInviteEl.value = '';
+    });
+
+    // --- Au chargement de la page ---
+    chargerTirage();
+  </script>
+</body>
+</html>

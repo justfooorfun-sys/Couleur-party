@@ -5,22 +5,66 @@
   <title>Tirage couleurs soirée</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* --------- Thème festif clair + confettis animés --------- */
+
+    :root {
+      --bg-gradient: linear-gradient(135deg, #ffe4e6, #fef3c7, #bfdbfe);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(148, 163, 184, 0.7);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --accent-1: #ec4899;
+      --accent-2: #6366f1;
+      --accent-3: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #111827;
-      color: #e5e7eb;
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      min-height: 100vh;
+      padding: 1.5rem;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Confettis animés avec un pseudo-élément en background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -100px;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(244, 63, 94, 0.5) 0, rgba(244, 63, 94, 0) 55%),
+        radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.45) 0, rgba(59, 130, 246, 0) 55%),
+        radial-gradient(circle at 30% 80%, rgba(16, 185, 129, 0.45) 0, rgba(16, 185, 129, 0) 55%),
+        radial-gradient(circle at 70% 75%, rgba(234, 179, 8, 0.45) 0, rgba(234, 179, 8, 0) 55%),
+        radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.25) 0, rgba(236, 72, 153, 0) 55%);
+      background-size: 280px 280px;
+      animation: confettiShift 28s linear infinite alternate;
+      opacity: 0.75;
+      z-index: -1;
+    }
+
+    @keyframes confettiShift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(-40px, 40px, 0) scale(1.03); }
+      100% { transform: translate3d(40px, -40px, 0) scale(1.02); }
     }
 
     .container {
-      max-width: 900px;
+      max-width: 960px;
       width: 100%;
-      padding: 1.5rem;
+      position: relative;
+      z-index: 1;
     }
 
     h1, h2 {
@@ -29,59 +73,92 @@
     }
 
     h1 {
-      font-size: 1.7rem;
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      background: linear-gradient(90deg, #ec4899, #f97316, #22c55e, #6366f1);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
     }
 
     .card {
-      background: #020617;
-      border-radius: 1rem;
-      padding: 1.25rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      border: 1px solid #1f2937;
+      background: var(--card-bg);
+      border-radius: 1.2rem;
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.22);
+      border: 1px solid var(--card-border);
       margin-bottom: 1.25rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.9);
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.8);
     }
 
     label {
       font-weight: 600;
       display: block;
       margin-bottom: 0.25rem;
+      font-size: 0.9rem;
     }
 
-    textarea, input {
+    textarea, select {
       width: 100%;
-      box-sizing: border-box;
-      border-radius: 0.5rem;
-      border: 1px solid #374151;
+      border-radius: 0.75rem;
+      border: 1px solid #cbd5f5;
       padding: 0.5rem 0.75rem;
-      background: #020617;
-      color: #e5e7eb;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
       resize: vertical;
       min-height: 80px;
       font-family: inherit;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.9rem;
     }
 
-    input {
+    select {
       min-height: auto;
+      padding-right: 2rem;
     }
 
-    textarea:focus, input:focus {
+    textarea:focus, select:focus {
       outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 1px #6366f1;
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 1px var(--accent-2);
+      background: #ffffff;
     }
 
     .small-muted {
       font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: -0.4rem;
+      color: var(--text-muted);
+      margin-top: -0.2rem;
       margin-bottom: 0.6rem;
     }
 
     button {
       border: none;
       border-radius: 999px;
-      padding: 0.5rem 1.2rem;
+      padding: 0.55rem 1.4rem;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
@@ -91,16 +168,37 @@
       align-items: center;
       gap: 0.4rem;
       margin-top: 0.25rem;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+      transform: translateY(0);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 35px rgba(79, 70, 229, 0.45);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 6px 15px rgba(79, 70, 229, 0.35);
     }
 
     button:disabled {
       opacity: 0.4;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     .btn-secondary {
-      background: #111827;
-      border: 1px solid #374151;
+      background: rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      color: var(--text-main);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(15, 23, 42, 0.08);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
     }
 
     .flex {
@@ -110,71 +208,73 @@
     }
 
     .flex-2 {
-      flex: 1 1 250px;
+      flex: 1 1 260px;
     }
 
     .result-box {
       margin-top: 0.75rem;
       padding: 0.85rem 1rem;
-      border-radius: 0.75rem;
-      background: #030712;
-      border: 1px solid #1f2937;
-      font-size: 0.95rem;
+      border-radius: 0.9rem;
+      background: rgba(248, 250, 252, 0.92);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      font-size: 0.9rem;
     }
 
     .result-highlight {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 0.3rem;
     }
 
     .badge {
       display: inline-block;
-      padding: 0.15rem 0.6rem;
+      padding: 0.2rem 0.65rem;
       border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 600;
-      background: #111827;
-      border: 1px solid #374151;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.9);
       margin-right: 0.25rem;
-      margin-top: 0.2rem;
+      margin-top: 0.25rem;
+      color: var(--text-muted);
     }
 
     .badge-good {
-      border-color: #22c55e;
-      color: #22c55e;
+      border-color: rgba(34, 197, 94, 0.9);
+      color: #15803d;
     }
 
     .badge-warn {
-      border-color: #eab308;
-      color: #eab308;
+      border-color: rgba(234, 179, 8, 0.9);
+      color: #854d0e;
     }
 
     .badge-bad {
-      border-color: #ef4444;
-      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.9);
+      color: #b91c1c;
     }
 
     .error {
-      color: #fca5a5;
+      color: #b91c1c;
       font-size: 0.9rem;
       margin-top: 0.4rem;
     }
 
     .success {
-      color: #bbf7d0;
+      color: #15803d;
       font-size: 0.9rem;
       margin-top: 0.4rem;
     }
 
     .color-preview {
       display: inline-block;
-      padding: 0.15rem 0.6rem;
+      padding: 0.2rem 0.7rem;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.2);
-      margin-left: 0.3rem;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      margin-left: 0.35rem;
+      background: white;
     }
 
     .fade-out {
@@ -185,22 +285,52 @@
       from { opacity: 1; }
       to { opacity: 0; }
     }
+
+    .pill-row {
+      margin-top: 0.5rem;
+    }
+
+    .pill-row span {
+      display: inline-block;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.72rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(255, 255, 255, 0.8);
+      margin: 0.1rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+      .card {
+        padding: 1rem 1.1rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Tirage secret des couleurs</h1>
-    <p style="text-align:center;font-size:0.9rem;color:#9ca3af;">
-      Tout se passe dans ce navigateur, aucune donnée envoyée sur un serveur.
+    <h1>Party Colors</h1>
+    <p class="subtitle">
+      Tirage secret des couleurs, paires surprises et ambiance confettis 🎉
     </p>
 
     <!-- 1. Configuration & tirage -->
     <div class="card">
-      <h2>1. Préparer le tirage</h2>
+      <div class="card-header">
+        <h2 style="margin:0;font-size:1.1rem;">1. Préparer le tirage</h2>
+        <span class="chip">Organisateur · configuration</span>
+      </div>
+
       <p class="small-muted">
-        ⚠️ Les 12 premiers invités utilisés pour l’aléatoire sont les 12 premiers noms
-        en lisant d’abord la liste des hommes puis la liste des femmes.
+        Les 12 premiers invités utilisés pour la partie aléatoire sont les 12 premiers noms
+        en lisant d’abord la liste des hommes puis la liste des femmes.<br>
+        Au-delà de 12, les couleurs sont attribuées de manière systématique par paire de 2.
       </p>
+
       <div class="flex">
         <div class="flex-2">
           <label for="hommes">Liste des hommes</label>
@@ -213,7 +343,7 @@
       </div>
 
       <label for="couleurs">Liste des couleurs (monochromes)</label>
-      <textarea id="couleurs" placeholder="Une couleur par ligne">Rouge Vif
+      <textarea id="couleurs">Rouge Vif
 Bleu Électrique
 Vert Émeraude
 Jaune Soleil
@@ -224,26 +354,33 @@ Noir
 Blanc Pur
 Argenté / Gris Métallique</textarea>
       <div class="small-muted">
-        Pour les invités au-delà de 12, les couleurs seront attribuées dans cet ordre, par paire de 2.
-        Si la liste est épuisée, le script créera automatiquement « Couleur 11 », « Couleur 12 », etc.
+        Pour les invités au-delà de 12, ces couleurs sont utilisées dans cet ordre, par paire de 2.<br>
+        Si la liste est épuisée, le site créera automatiquement « Couleur 11 », « Couleur 12 », etc.
       </div>
 
-      <button id="btn-generer">🔮 Générer le tirage</button>
+      <button id="btn-generer">🔮 Générer / Mettre à jour le tirage</button>
 
       <div id="generation-info" class="result-box" style="display:none;"></div>
     </div>
 
     <!-- 2. Révélation individuelle -->
     <div class="card">
-      <h2>2. Révéler sa couleur (invité)</h2>
+      <div class="card-header">
+        <h2 style="margin:0;font-size:1.1rem;">2. Révéler sa couleur</h2>
+        <span class="chip">Invité · accès individuel</span>
+      </div>
+
       <p class="small-muted">
-        Chaque invité tape son prénom (ou nom) exactement comme dans les listes.<br>
-        La couleur est révélée uniquement pour cette personne puis oubliée.
+        Choisis ton prénom dans la liste. Ta couleur et ta paire seront révélées.<br>
+        Tu peux revenir plus tard : ta couleur restera la même sur ce téléphone / navigateur.
       </p>
 
-      <label for="nom-invite">Prénom (ou nom complet)</label>
-      <input id="nom-invite" type="text" placeholder="Ex : Alex" />
-      <button id="btn-reveler" disabled>👀 Voir ma couleur</button>
+      <label for="invite-select">Sélectionne ton prénom</label>
+      <select id="invite-select" disabled>
+        <option value="">— Attente d’un tirage —</option>
+      </select>
+
+      <button id="btn-reveler" disabled>👀 Voir / revoir ma couleur</button>
       <button id="btn-reset" class="btn-secondary" style="margin-left:0.5rem;">♻️ Réinitialiser le tirage</button>
 
       <div id="revelation-zone" class="result-box" style="display:none;margin-top:0.75rem;"></div>
@@ -251,7 +388,7 @@ Argenté / Gris Métallique</textarea>
   </div>
 
   <script>
-    // --- Utilitaires ---
+    // --------- Utilitaires ---------
 
     function nettoyerListeBrute(texte) {
       return texte
@@ -282,28 +419,31 @@ Argenté / Gris Métallique</textarea>
       return nom.trim().toLowerCase();
     }
 
-    // --- Clés localStorage ---
-    const LS_KEY_ASSIGN = 'tirageCouleurs_assignations';
-    const LS_KEY_ACTIF  = 'tirageCouleurs_actif';
-    const LS_KEY_META   = 'tirageCouleurs_meta';
-    const LS_KEY_CFG    = 'tirageCouleurs_config';
+    // --------- Clés localStorage ---------
 
-    // --- État global ---
-    let assignations = {};       // nom normalisé -> { nomOriginal, couleur }
+    const LS_KEY_ASSIGN = 'tirageCouleurs_assignations_v2';
+    const LS_KEY_ACTIF  = 'tirageCouleurs_actif_v2';
+    const LS_KEY_META   = 'tirageCouleurs_meta_v2';
+    const LS_KEY_CFG    = 'tirageCouleurs_config_v2';
+
+    // --------- État global ---------
+
+    // assignations : cleNomNormalise -> { nomOriginal, couleur, partenaire: string|null, revealed: bool }
+    let assignations = {};
     let tirageActif = false;
-    let metaTirage = null;       // { totalInvites, coreCount, nbHF, nbUnisexes, nbOrphelins, nbExtraPairs, nbExtraOrphelins }
+    let metaTirage = null;
 
     const hommesEl = document.getElementById('hommes');
     const femmesEl = document.getElementById('femmes');
     const couleursEl = document.getElementById('couleurs');
     const btnGenerer = document.getElementById('btn-generer');
     const infoGen = document.getElementById('generation-info');
-    const nomInviteEl = document.getElementById('nom-invite');
+    const inviteSelectEl = document.getElementById('invite-select');
     const btnReveler = document.getElementById('btn-reveler');
     const btnReset = document.getElementById('btn-reset');
     const zoneRevelation = document.getElementById('revelation-zone');
 
-    // --- Sauvegarde / chargement localStorage ---
+    // --------- Sauvegarde / chargement localStorage ---------
 
     function sauvegarderTirage() {
       try {
@@ -347,6 +487,8 @@ Argenté / Gris Métallique</textarea>
 
           if (tirageActif) {
             btnReveler.disabled = false;
+            inviteSelectEl.disabled = false;
+            remplirListeInvites();
             afficherInfoGenerationRecharge();
           }
         }
@@ -369,7 +511,36 @@ Argenté / Gris Métallique</textarea>
       }
     }
 
-    // --- Affichage info tirage ---
+    // --------- UI : liste déroulante d'invités ---------
+
+    function remplirListeInvites() {
+      const entries = Object.entries(assignations);
+      entries.sort((a, b) => {
+        const nomA = a[1].nomOriginal.toLowerCase();
+        const nomB = b[1].nomOriginal.toLowerCase();
+        if (nomA < nomB) return -1;
+        if (nomA > nomB) return 1;
+        return 0;
+      });
+
+      inviteSelectEl.innerHTML = '';
+      const optDefault = document.createElement('option');
+      optDefault.value = '';
+      optDefault.textContent = '— Sélectionne ton prénom —';
+      inviteSelectEl.appendChild(optDefault);
+
+      entries.forEach(([cle, data]) => {
+        const opt = document.createElement('option');
+        opt.value = cle;
+        opt.textContent = data.nomOriginal;
+        inviteSelectEl.appendChild(opt);
+      });
+
+      inviteSelectEl.disabled = entries.length === 0;
+      btnReveler.disabled = entries.length === 0;
+    }
+
+    // --------- Affichage infos tirage ---------
 
     function afficherInfoGeneration(meta) {
       metaTirage = meta;
@@ -412,11 +583,12 @@ Argenté / Gris Métallique</textarea>
     }
 
     function afficherInfoGenerationRecharge() {
+      const totalRestants = Object.keys(assignations).length;
       if (!metaTirage) {
         infoGen.style.display = 'block';
         infoGen.innerHTML = `
           <div class="result-highlight">Tirage chargé ✅</div>
-          <div>${Object.keys(assignations).length} invité(s) encore non révélés.</div>
+          <div>${totalRestants} invité(s) actuellement configurés.</div>
           <div class="small-muted" style="margin-top:0.5rem;">
             Ce tirage vient d’un précédent lancement. Les couleurs restent les mêmes
             qu’avant le rechargement de la page.
@@ -438,7 +610,7 @@ Argenté / Gris Métallique</textarea>
       let html = '';
       html += `<div class="result-highlight">Tirage chargé ✅</div>`;
       html += `<div>${totalInvites} invité(s) au total à l’origine.</div>`;
-      html += `<div>${Object.keys(assignations).length} invité(s) encore non révélés.</div>`;
+      html += `<div>${totalRestants} invité(s) configurés dans ce navigateur.</div>`;
       html += `<div>${coreCount} invité(s) en tirage aléatoire (jusqu'au 12e).</div>`;
       if (totalInvites > coreCount) {
         html += `<div>${totalInvites - coreCount} invité(s) en mode couleurs fixes (après 12).</div>`;
@@ -462,7 +634,8 @@ Argenté / Gris Métallique</textarea>
       infoGen.innerHTML = html;
     }
 
-    // --- Générer le tirage ---
+    // --------- Génération du tirage ---------
+
     btnGenerer.addEventListener('click', () => {
       const hommesBrut = nettoyerListeBrute(hommesEl.value);
       const femmesBrut = nettoyerListeBrute(femmesEl.value);
@@ -476,6 +649,7 @@ Argenté / Gris Métallique</textarea>
         infoGen.innerHTML = '<span class="error">⚠️ Tu dois saisir au moins un homme ou une femme.</span>';
         tirageActif = false;
         btnReveler.disabled = true;
+        inviteSelectEl.disabled = true;
         assignations = {};
         effacerTirage();
         return;
@@ -486,13 +660,13 @@ Argenté / Gris Métallique</textarea>
         infoGen.innerHTML = '<span class="error">⚠️ Tu dois saisir au moins une couleur.</span>';
         tirageActif = false;
         btnReveler.disabled = true;
+        inviteSelectEl.disabled = true;
         assignations = {};
         effacerTirage();
         return;
       }
 
-      // Construire la liste complète des invités, dans l'ordre :
-      // d'abord tous les hommes puis toutes les femmes.
+      // Liste complète des invités dans l’ordre : d’abord H, puis F
       const hommes = hommesBrut.map(n => ({ nom: n, genre: 'H' }));
       const femmes = femmesBrut.map(n => ({ nom: n, genre: 'F' }));
       const tous = [...hommes, ...femmes];
@@ -502,7 +676,7 @@ Argenté / Gris Métallique</textarea>
       const coreGuests = tous.slice(0, coreCount);
       const extraGuests = tous.slice(coreCount);
 
-      // --- 1) Tirage aléatoire pour les 12 premiers (ou moins) ---
+      // --- 1) Tirage aléatoire pour les 12 premiers ---
 
       const hommesCore = coreGuests.filter(g => g.genre === 'H').map(g => g.nom);
       const femmesCore = coreGuests.filter(g => g.genre === 'F').map(g => g.nom);
@@ -515,7 +689,6 @@ Argenté / Gris Métallique</textarea>
       let nbUnisexes = 0;
       let nbOrphelins = 0;
 
-      // Paires H/F tant que possible
       while (hommesMelanges.length > 0 && femmesMelangees.length > 0) {
         const h = hommesMelanges.pop();
         const f = femmesMelangees.pop();
@@ -523,7 +696,6 @@ Argenté / Gris Métallique</textarea>
         nbHF++;
       }
 
-      // Reste éventuel : paires unisexes + orphelin
       let restants = [];
       const restantsH = [...hommesMelanges];
       const restantsF = [...femmesMelangees];
@@ -546,7 +718,7 @@ Argenté / Gris Métallique</textarea>
         nbOrphelins++;
       }
 
-      // --- 2) Invités supplémentaires (au-delà de 12) : couleurs fixes par paire ---
+      // --- 2) Invités supplémentaires (après 12) : paires fixes ---
 
       const unitesExtra = []; // {membres:[nom1, nom2?], type:'EXTRA_PAIR'|'EXTRA_ORPHELIN'}
       let nbExtraPairs = 0;
@@ -564,27 +736,42 @@ Argenté / Gris Métallique</textarea>
         }
       }
 
-      // --- 3) Assignation des couleurs ---
+      // --- 3) Assignations (couleurs + partenaire) ---
 
       assignations = {};
 
-      // 3a) Couleurs aléatoires pour les 12 premiers
+      // 3a) Couleurs aléatoires pour les unités core
       unitesCore.forEach(unite => {
         const couleur = randomFromArray(couleursBrut);
-        unite.membres.forEach(nom => {
-          assignations[normaliserNom(nom)] = {
-            nomOriginal: nom,
-            couleur
+        const [m1, m2] = unite.membres;
+        if (m1 && m2) {
+          assignations[normaliserNom(m1)] = {
+            nomOriginal: m1,
+            couleur,
+            partenaire: m2,
+            revealed: false
           };
-        });
+          assignations[normaliserNom(m2)] = {
+            nomOriginal: m2,
+            couleur,
+            partenaire: m1,
+            revealed: false
+          };
+        } else if (m1) {
+          assignations[normaliserNom(m1)] = {
+            nomOriginal: m1,
+            couleur,
+            partenaire: null,
+            revealed: false
+          };
+        }
       });
 
-      // 3b) Couleurs fixes séquentielles pour les suivants
-      let indexPair = 0; // index de paire pour les couleurs fixes
+      // 3b) Couleurs séquentielles pour les unités extra (au-delà de 12)
+      let indexPair = 0;
 
       unitesExtra.forEach(unite => {
         let couleur;
-        // On utilise 1 couleur par unité (paire ou orphelin), en avançant l'index
         if (indexPair < couleursBrut.length) {
           couleur = couleursBrut[indexPair];
         } else {
@@ -593,18 +780,34 @@ Argenté / Gris Métallique</textarea>
         }
         indexPair++;
 
-        unite.membres.forEach(nom => {
-          assignations[normaliserNom(nom)] = {
-            nomOriginal: nom,
-            couleur
+        const [m1, m2] = unite.membres;
+        if (m1 && m2) {
+          assignations[normaliserNom(m1)] = {
+            nomOriginal: m1,
+            couleur,
+            partenaire: m2,
+            revealed: false
           };
-        });
+          assignations[normaliserNom(m2)] = {
+            nomOriginal: m2,
+            couleur,
+            partenaire: m1,
+            revealed: false
+          };
+        } else if (m1) {
+          assignations[normaliserNom(m1)] = {
+            nomOriginal: m1,
+            couleur,
+            partenaire: null,
+            revealed: false
+          };
+        }
       });
 
       tirageActif = true;
       btnReveler.disabled = false;
+      inviteSelectEl.disabled = false;
 
-      // 4) Meta et affichage
       const meta = {
         totalInvites,
         coreCount,
@@ -616,13 +819,12 @@ Argenté / Gris Métallique</textarea>
       };
       afficherInfoGeneration(meta);
 
-      // 5) Sauvegarde pour résister aux rechargements
+      remplirListeInvites();
       sauvegarderTirage();
-
-      nomInviteEl.value = '';
     });
 
-    // --- Révéler la couleur pour un invité ---
+    // --------- Révéler la couleur ---------
+
     btnReveler.addEventListener('click', () => {
       if (!tirageActif) {
         zoneRevelation.style.display = 'block';
@@ -630,68 +832,83 @@ Argenté / Gris Métallique</textarea>
         return;
       }
 
-      const saisi = nomInviteEl.value.trim();
-      if (saisi.length === 0) {
+      const cle = inviteSelectEl.value;
+      if (!cle) {
         zoneRevelation.style.display = 'block';
-        zoneRevelation.innerHTML = '<span class="error">⚠️ Merci de saisir ton prénom / nom.</span>';
+        zoneRevelation.innerHTML = '<span class="error">⚠️ Merci de sélectionner ton prénom.</span>';
         return;
       }
 
-      const cle = normaliserNom(saisi);
       const data = assignations[cle];
-
       if (!data) {
         zoneRevelation.style.display = 'block';
-        zoneRevelation.innerHTML = `<span class="error">⚠️ Ce nom n’est pas dans la liste, ou bien la couleur a déjà été révélée et oubliée.</span>`;
+        zoneRevelation.innerHTML = `<span class="error">⚠️ Ce nom n’est pas connu dans ce navigateur.</span>`;
         return;
       }
 
-      const couleur = data.couleur;
-      const nomOriginal = data.nomOriginal;
+      const { nomOriginal, couleur, partenaire, revealed } = data;
+
+      let html = '';
+      html += `<div class="result-highlight">Ta couleur pour la soirée</div>`;
+      html += `<div style="margin-bottom:0.4rem;">Bonjour <strong>${nomOriginal}</strong> 👋</div>`;
+      if (revealed) {
+        html += `<div class="small-muted" style="margin-bottom:0.4rem;">
+          Tu avais déjà vu ta couleur, la voici à nouveau :
+        </div>`;
+      } else {
+        html += `<div class="small-muted" style="margin-bottom:0.4rem;">
+          Voici ta couleur secrète. Elle restera la même si tu reviens sur ce site avec ce téléphone / navigateur.
+        </div>`;
+      }
+
+      html += `<div>Ta couleur est :</div>`;
+      html += `<div style="margin-top:0.5rem; font-size:1.35rem; font-weight:800;">
+        ${couleur}
+        <span class="color-preview">●</span>
+      </div>`;
+
+      if (partenaire) {
+        html += `<div style="margin-top:0.7rem;">
+          🤝 Tu es en paire avec : <strong>${partenaire}</strong>
+        </div>`;
+      } else {
+        html += `<div style="margin-top:0.7rem;">
+          🤝 Cette fois, tu n’as pas de partenaire attitré. Tu es en mode solo ✨
+        </div>`;
+      }
+
+      html += `<div class="small-muted" style="margin-top:0.7rem;">
+        Cette info est mémorisée dans ce navigateur uniquement. Sur un autre téléphone, le site ne te reconnaîtra pas.
+      </div>`;
 
       zoneRevelation.style.display = 'block';
-      zoneRevelation.innerHTML = `
-        <div class="result-highlight">Ta couleur pour la soirée</div>
-        <div style="margin-bottom:0.4rem;">Bonjour <strong>${nomOriginal}</strong> 👋</div>
-        <div>Ta couleur secrète est :</div>
-        <div style="margin-top:0.5rem; font-size:1.4rem; font-weight:800;">
-          ${couleur}
-          <span class="color-preview">●</span>
-        </div>
-        <div class="small-muted" style="margin-top:0.6rem;">
-          Une fois révélée, ta couleur est oubliée de ce navigateur.<br>
-          Recharger la page ne change pas les couleurs des autres invités.
-        </div>
-      `;
+      zoneRevelation.innerHTML = html;
 
-      // Autodestruction : on retire l’assignation de la mémoire
-      delete assignations[cle];
+      // Marquer comme "déjà révélé", mais ne pas supprimer
+      data.revealed = true;
+      assignations[cle] = data;
       sauvegarderTirage();
 
-      setTimeout(() => {
-        zoneRevelation.classList.add('fade-out');
-        setTimeout(() => {
-          zoneRevelation.style.display = 'none';
-          zoneRevelation.classList.remove('fade-out');
-          zoneRevelation.innerHTML = '';
-        }, 900);
-      }, 15000);
+      // On laisse l’info visible (pas de fade-out auto).
     });
 
-    // --- Reset complet du tirage ---
+    // --------- Reset complet ---------
+
     btnReset.addEventListener('click', () => {
       assignations = {};
       tirageActif = false;
       metaTirage = null;
       effacerTirage();
       btnReveler.disabled = true;
+      inviteSelectEl.disabled = true;
+      inviteSelectEl.innerHTML = '<option value="">— Attente d’un tirage —</option>';
       infoGen.style.display = 'none';
       zoneRevelation.style.display = 'none';
       zoneRevelation.innerHTML = '';
-      nomInviteEl.value = '';
     });
 
-    // --- Au chargement de la page ---
+    // --------- Init au chargement ---------
+
     chargerTirage();
   </script>
 </body>

@@ -120,4 +120,247 @@ select, input[type=text] {
   border: 1px solid #cbd5e1;
   padding: 0.6rem;
   margin-bottom: 0.8rem;
-  font-si
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(135deg,#6366f1,#ec4899);
+  box-shadow: 0 6px 18px rgba(99,102,241,0.35);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.result-box {
+  background: white;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.counter {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.color-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border:1px solid #999;
+  margin-left: 4px;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1>🎉 Couleur de la Soirée</h1>
+  <p class="subtitle">
+    Trouve ton nom, ta couleur apparaît.  
+    Si tu n’es pas dans la liste, ajoute ton prénom juste en dessous ✨  
+  </p>
+
+  <div id="counter" class="counter">0 personnes ont consulté leur couleur</div>
+
+  <div class="card">
+    <label>Invité(e) dans la liste :</label>
+    <select id="sel">
+      <option value="">— Sélectionnez votre prénom —</option>
+    </select>
+
+    <label>Ou entrez votre prénom si vous n’êtes pas dans la liste :</label>
+    <input type="text" id="extra" placeholder="Tape ton prénom ici…" />
+
+    <button id="btn">Voir ma couleur</button>
+
+    <div id="result" class="result-box" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+/* -----------------------------------------------------------
+   🔐 1) 12 NOMS + PAIRES GÉNÉRÉES ALÉATOIREMENT (INTERNES)
+----------------------------------------------------------- */
+
+const baseNames = [
+  "Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo",
+  "Camille","Anna","Sarah","Charlotte","Marie"
+];
+
+// Génération aléatoire secrète des paires
+function generatePairs(list) {
+  const shuffled = [...list].sort(()=>Math.random()-0.5);
+  const units = [];
+  while(shuffled.length >= 2){
+    units.push([shuffled.pop(), shuffled.pop()]);
+  }
+  if(shuffled.length===1){
+    units.push([shuffled.pop()]);
+  }
+  return units;
+}
+
+const baseUnits = generatePairs(baseNames);
+
+// Couleurs disponibles
+const baseColors = [
+  "Rouge Vif","Bleu Électrique","Vert Émeraude","Jaune Soleil",
+  "Orange","Rose Fushia","Violet Profond","Noir","Blanc Pur",
+  "Argenté / Gris Métallique"
+];
+
+// Attribution aléatoire d’un coloris pour chaque paire principale
+const assignments = {};
+baseUnits.forEach(unit=>{
+  const color = baseColors[Math.floor(Math.random()*baseColors.length)];
+  if(unit.length===2){
+    assignments[unit[0]] = {color, partner: unit[1], base:true};
+    assignments[unit[1]] = {color, partner: unit[0], base:true};
+  } else {
+    assignments[unit[0]] = {color, partner: null, base:true};
+  }
+});
+
+/* -----------------------------------------------------------
+   🔄 2) GESTION DES NOUVEAUX (APRES 12)
+----------------------------------------------------------- */
+let extraList = [];
+let extraColorIndex = 0;
+
+function getExtraColorPair() {
+  if(extraColorIndex < baseColors.length){
+    return baseColors[extraColorIndex++];
+  } else {
+    return "Couleur " + (extraColorIndex++ + 1);
+  }
+}
+
+/* -----------------------------------------------------------
+   💾 3) PERSISTENCE LOCALE
+----------------------------------------------------------- */
+
+let saved = JSON.parse(localStorage.getItem("SOIREE_DATA") || "{}");
+
+function save() {
+  localStorage.setItem("SOIREE_DATA", JSON.stringify(saved));
+}
+
+/* -----------------------------------------------------------
+   🎛️ 4) INITIALISATION LISTE DÉROULANTE
+----------------------------------------------------------- */
+
+const sel = document.getElementById("sel");
+baseNames.forEach(n=>{
+  const opt = document.createElement("option");
+  opt.value = n;
+  opt.textContent = n;
+  sel.appendChild(opt);
+});
+
+/* -----------------------------------------------------------
+   👁️ 5) AFFICHAGE COMPTEUR
+----------------------------------------------------------- */
+
+function updateCounter() {
+  const c = saved.count || 0;
+  document.getElementById("counter").textContent =
+    c + " personne" + (c>1?"s":"") + " ont consulté leur couleur";
+}
+updateCounter();
+
+/* -----------------------------------------------------------
+   🎉 6) BOUTON "VOIR MA COULEUR"
+----------------------------------------------------------- */
+
+document.getElementById("btn").onclick = ()=>{
+  let name = sel.value || document.getElementById("extra").value.trim();
+  if(!name){
+    alert("Merci d’entrer ou choisir votre prénom.");
+    return;
+  }
+
+  // Déjà existant ?
+  if(saved[name]){
+    show(name, saved[name].color, saved[name].partner);
+    saved.count = (saved.count||0)+1;
+    save();
+    updateCounter();
+    return;
+  }
+
+  // Base ?
+  if(assignments[name]){
+    saved[name] = assignments[name];
+    saved.count = (saved.count||0)+1;
+    save();
+    updateCounter();
+    show(name, saved[name].color, saved[name].partner);
+    return;
+  }
+
+  // Nouveau venu
+  extraList.push(name);
+  let pairIndex = extraList.length-1;
+
+  if(pairIndex % 2 === 1){
+    // paire complète
+    let mate = extraList[pairIndex-1];
+    let color = getExtraColorPair();
+
+    saved[name] = {color, partner: mate};
+    saved[mate] = {color, partner: name};
+
+  } else {
+    // orphelin temporaire, couleur créée à ce moment
+    let color = getExtraColorPair();
+    saved[name] = {color, partner:null};
+  }
+
+  saved.count = (saved.count||0)+1;
+  save();
+  updateCounter();
+  show(name, saved[name].color, saved[name].partner);
+};
+
+/* -----------------------------------------------------------
+   🎨 7) AFFICHAGE DU RÉSULTAT
+----------------------------------------------------------- */
+
+function show(name, color, partner){
+  const box = document.getElementById("result");
+  box.style.display = "block";
+
+  box.innerHTML = `
+    <div><strong>${name}</strong>, ta couleur est :</div>
+    <div style="font-size:1.3rem; font-weight:700; margin:0.3rem 0;">
+      ${color}
+      <span class="color-dot" style="background:white;"></span>
+    </div>
+    <div>
+      ${ partner 
+          ? "🤝 Tu es en paire avec <strong>"+partner+"</strong>"
+          : "✨ Tu es en solo (pas de partenaire)" }
+    </div>
+    <div style="margin-top:0.5rem; font-size:0.8rem; color:#555;">
+      Tu peux revenir sur la page : ta couleur ne changera pas.
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

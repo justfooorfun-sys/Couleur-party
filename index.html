@@ -1,915 +1,123 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tirage couleurs soirée</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    /* --------- Thème festif clair + confettis animés --------- */
-
-    :root {
-      --bg-gradient: linear-gradient(135deg, #ffe4e6, #fef3c7, #bfdbfe);
-      --card-bg: rgba(255, 255, 255, 0.9);
-      --card-border: rgba(148, 163, 184, 0.7);
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --accent-1: #ec4899;
-      --accent-2: #6366f1;
-      --accent-3: #22c55e;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 1.5rem;
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Confettis animés avec un pseudo-élément en background */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: -100px;
-      pointer-events: none;
-      background-image:
-        radial-gradient(circle at 20% 20%, rgba(244, 63, 94, 0.5) 0, rgba(244, 63, 94, 0) 55%),
-        radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.45) 0, rgba(59, 130, 246, 0) 55%),
-        radial-gradient(circle at 30% 80%, rgba(16, 185, 129, 0.45) 0, rgba(16, 185, 129, 0) 55%),
-        radial-gradient(circle at 70% 75%, rgba(234, 179, 8, 0.45) 0, rgba(234, 179, 8, 0) 55%),
-        radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.25) 0, rgba(236, 72, 153, 0) 55%);
-      background-size: 280px 280px;
-      animation: confettiShift 28s linear infinite alternate;
-      opacity: 0.75;
-      z-index: -1;
-    }
-
-    @keyframes confettiShift {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(-40px, 40px, 0) scale(1.03); }
-      100% { transform: translate3d(40px, -40px, 0) scale(1.02); }
-    }
-
-    .container {
-      max-width: 960px;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    h1, h2 {
-      text-align: center;
-      margin-bottom: 0.75rem;
-    }
-
-    h1 {
-      font-size: 1.9rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      background: linear-gradient(90deg, #ec4899, #f97316, #22c55e, #6366f1);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .subtitle {
-      text-align: center;
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 1.4rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 1.2rem;
-      padding: 1.2rem 1.4rem;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.22);
-      border: 1px solid var(--card-border);
-      margin-bottom: 1.25rem;
-      backdrop-filter: blur(14px);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .chip {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.9);
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.8);
-    }
-
-    label {
-      font-weight: 600;
-      display: block;
-      margin-bottom: 0.25rem;
-      font-size: 0.9rem;
-    }
-
-    textarea, select {
-      width: 100%;
-      border-radius: 0.75rem;
-      border: 1px solid #cbd5f5;
-      padding: 0.5rem 0.75rem;
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--text-main);
-      resize: vertical;
-      min-height: 80px;
-      font-family: inherit;
-      margin-bottom: 0.6rem;
-      font-size: 0.9rem;
-    }
-
-    select {
-      min-height: auto;
-      padding-right: 2rem;
-    }
-
-    textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--accent-2);
-      box-shadow: 0 0 0 1px var(--accent-2);
-      background: #ffffff;
-    }
-
-    .small-muted {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: -0.2rem;
-      margin-bottom: 0.6rem;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 0.55rem 1.4rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, #6366f1, #ec4899);
-      color: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-top: 0.25rem;
-      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
-      transform: translateY(0);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    }
-
-    button:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 35px rgba(79, 70, 229, 0.45);
-    }
-
-    button:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 6px 15px rgba(79, 70, 229, 0.35);
-    }
-
-    button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .btn-secondary {
-      background: rgba(15, 23, 42, 0.06);
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      color: var(--text-main);
-      box-shadow: none;
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: rgba(15, 23, 42, 0.08);
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
-    }
-
-    .flex {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .flex-2 {
-      flex: 1 1 260px;
-    }
-
-    .result-box {
-      margin-top: 0.75rem;
-      padding: 0.85rem 1rem;
-      border-radius: 0.9rem;
-      background: rgba(248, 250, 252, 0.92);
-      border: 1px solid rgba(209, 213, 219, 0.9);
-      font-size: 0.9rem;
-    }
-
-    .result-highlight {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.2rem 0.65rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      margin-right: 0.25rem;
-      margin-top: 0.25rem;
-      color: var(--text-muted);
-    }
-
-    .badge-good {
-      border-color: rgba(34, 197, 94, 0.9);
-      color: #15803d;
-    }
-
-    .badge-warn {
-      border-color: rgba(234, 179, 8, 0.9);
-      color: #854d0e;
-    }
-
-    .badge-bad {
-      border-color: rgba(239, 68, 68, 0.9);
-      color: #b91c1c;
-    }
-
-    .error {
-      color: #b91c1c;
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-    }
-
-    .success {
-      color: #15803d;
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-    }
-
-    .color-preview {
-      display: inline-block;
-      padding: 0.2rem 0.7rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      margin-left: 0.35rem;
-      background: white;
-    }
-
-    .fade-out {
-      animation: fadeOut 1s ease forwards;
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-
-    .pill-row {
-      margin-top: 0.5rem;
-    }
-
-    .pill-row span {
-      display: inline-block;
-      padding: 0.18rem 0.55rem;
-      font-size: 0.72rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(255, 255, 255, 0.8);
-      margin: 0.1rem;
-      color: var(--text-muted);
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 1rem;
-      }
-      .card {
-        padding: 1rem 1.1rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Party Colors</h1>
-    <p class="subtitle">
-      Tirage secret des couleurs, paires surprises et ambiance confettis 🎉
-    </p>
-
-    <!-- 1. Configuration & tirage -->
-    <div class="card">
-      <div class="card-header">
-        <h2 style="margin:0;font-size:1.1rem;">1. Préparer le tirage</h2>
-        <span class="chip">Organisateur · configuration</span>
-      </div>
-
-      <p class="small-muted">
-        Les 12 premiers invités utilisés pour la partie aléatoire sont les 12 premiers noms
-        en lisant d’abord la liste des hommes puis la liste des femmes.<br>
-        Au-delà de 12, les couleurs sont attribuées de manière systématique par paire de 2.
-      </p>
-
-      <div class="flex">
-        <div class="flex-2">
-          <label for="hommes">Liste des hommes</label>
-          <textarea id="hommes" placeholder="Un homme par ligne&#10;Ex :&#10;Alex&#10;Bruno&#10;Carlos"></textarea>
-        </div>
-        <div class="flex-2">
-          <label for="femmes">Liste des femmes</label>
-          <textarea id="femmes" placeholder="Une femme par ligne&#10;Ex :&#10;Alice&#10;Chloé&#10;Diane"></textarea>
-        </div>
-      </div>
-
-      <label for="couleurs">Liste des couleurs (monochromes)</label>
-      <textarea id="couleurs">Rouge Vif
-Bleu Électrique
-Vert Émeraude
-Jaune Soleil
-Orange
-Rose Fushia
-Violet Profond
-Noir
-Blanc Pur
-Argenté / Gris Métallique</textarea>
-      <div class="small-muted">
-        Pour les invités au-delà de 12, ces couleurs sont utilisées dans cet ordre, par paire de 2.<br>
-        Si la liste est épuisée, le site créera automatiquement « Couleur 11 », « Couleur 12 », etc.
-      </div>
-
-      <button id="btn-generer">🔮 Générer / Mettre à jour le tirage</button>
-
-      <div id="generation-info" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- 2. Révélation individuelle -->
-    <div class="card">
-      <div class="card-header">
-        <h2 style="margin:0;font-size:1.1rem;">2. Révéler sa couleur</h2>
-        <span class="chip">Invité · accès individuel</span>
-      </div>
-
-      <p class="small-muted">
-        Choisis ton prénom dans la liste. Ta couleur et ta paire seront révélées.<br>
-        Tu peux revenir plus tard : ta couleur restera la même sur ce téléphone / navigateur.
-      </p>
-
-      <label for="invite-select">Sélectionne ton prénom</label>
-      <select id="invite-select" disabled>
-        <option value="">— Attente d’un tirage —</option>
-      </select>
-
-      <button id="btn-reveler" disabled>👀 Voir / revoir ma couleur</button>
-      <button id="btn-reset" class="btn-secondary" style="margin-left:0.5rem;">♻️ Réinitialiser le tirage</button>
-
-      <div id="revelation-zone" class="result-box" style="display:none;margin-top:0.75rem;"></div>
-    </div>
-  </div>
-
-  <script>
-    // --------- Utilitaires ---------
-
-    function nettoyerListeBrute(texte) {
-      return texte
-        .split(/\r?\n/)
-        .map(l => l.trim())
-        .filter(l => l.length > 0);
-    }
-
-    function shuffle(array) {
-      // Fisher-Yates + crypto pour un tirage non biaisé
-      for (let i = array.length - 1; i > 0; i--) {
-        const rand = new Uint32Array(1);
-        crypto.getRandomValues(rand);
-        const j = rand[0] % (i + 1);
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-
-    function randomFromArray(array) {
-      const rand = new Uint32Array(1);
-      crypto.getRandomValues(rand);
-      const idx = rand[0] % array.length;
-      return array[idx];
-    }
-
-    function normaliserNom(nom) {
-      return nom.trim().toLowerCase();
-    }
-
-    // --------- Clés localStorage ---------
-
-    const LS_KEY_ASSIGN = 'tirageCouleurs_assignations_v2';
-    const LS_KEY_ACTIF  = 'tirageCouleurs_actif_v2';
-    const LS_KEY_META   = 'tirageCouleurs_meta_v2';
-    const LS_KEY_CFG    = 'tirageCouleurs_config_v2';
-
-    // --------- État global ---------
-
-    // assignations : cleNomNormalise -> { nomOriginal, couleur, partenaire: string|null, revealed: bool }
-    let assignations = {};
-    let tirageActif = false;
-    let metaTirage = null;
-
-    const hommesEl = document.getElementById('hommes');
-    const femmesEl = document.getElementById('femmes');
-    const couleursEl = document.getElementById('couleurs');
-    const btnGenerer = document.getElementById('btn-generer');
-    const infoGen = document.getElementById('generation-info');
-    const inviteSelectEl = document.getElementById('invite-select');
-    const btnReveler = document.getElementById('btn-reveler');
-    const btnReset = document.getElementById('btn-reset');
-    const zoneRevelation = document.getElementById('revelation-zone');
-
-    // --------- Sauvegarde / chargement localStorage ---------
-
-    function sauvegarderTirage() {
-      try {
-        localStorage.setItem(LS_KEY_ASSIGN, JSON.stringify(assignations));
-        localStorage.setItem(LS_KEY_ACTIF, tirageActif ? '1' : '0');
-        if (metaTirage) {
-          localStorage.setItem(LS_KEY_META, JSON.stringify(metaTirage));
-        }
-        const cfg = {
-          hommes: hommesEl.value,
-          femmes: femmesEl.value,
-          couleurs: couleursEl.value
-        };
-        localStorage.setItem(LS_KEY_CFG, JSON.stringify(cfg));
-      } catch (e) {
-        console.warn('Impossible de sauvegarder dans localStorage', e);
-      }
-    }
-
-    function chargerTirage() {
-      try {
-        const actifStr = localStorage.getItem(LS_KEY_ACTIF);
-        if (actifStr === '1') {
-          const assignStr = localStorage.getItem(LS_KEY_ASSIGN);
-          const metaStr = localStorage.getItem(LS_KEY_META);
-          const cfgStr = localStorage.getItem(LS_KEY_CFG);
-
-          if (assignStr) {
-            assignations = JSON.parse(assignStr);
-            tirageActif = true;
-          }
-          if (metaStr) {
-            metaTirage = JSON.parse(metaStr);
-          }
-          if (cfgStr) {
-            const cfg = JSON.parse(cfgStr);
-            if (typeof cfg.hommes === 'string') hommesEl.value = cfg.hommes;
-            if (typeof cfg.femmes === 'string') femmesEl.value = cfg.femmes;
-            if (typeof cfg.couleurs === 'string') couleursEl.value = cfg.couleurs;
-          }
-
-          if (tirageActif) {
-            btnReveler.disabled = false;
-            inviteSelectEl.disabled = false;
-            remplirListeInvites();
-            afficherInfoGenerationRecharge();
-          }
-        }
-      } catch (e) {
-        console.warn('Impossible de charger depuis localStorage', e);
-      }
-    }
-
-    function effacerTirage() {
-      assignations = {};
-      tirageActif = false;
-      metaTirage = null;
-      try {
-        localStorage.removeItem(LS_KEY_ASSIGN);
-        localStorage.removeItem(LS_KEY_ACTIF);
-        localStorage.removeItem(LS_KEY_META);
-        localStorage.removeItem(LS_KEY_CFG);
-      } catch (e) {
-        console.warn('Impossible de nettoyer localStorage', e);
-      }
-    }
-
-    // --------- UI : liste déroulante d'invités ---------
-
-    function remplirListeInvites() {
-      const entries = Object.entries(assignations);
-      entries.sort((a, b) => {
-        const nomA = a[1].nomOriginal.toLowerCase();
-        const nomB = b[1].nomOriginal.toLowerCase();
-        if (nomA < nomB) return -1;
-        if (nomA > nomB) return 1;
-        return 0;
-      });
-
-      inviteSelectEl.innerHTML = '';
-      const optDefault = document.createElement('option');
-      optDefault.value = '';
-      optDefault.textContent = '— Sélectionne ton prénom —';
-      inviteSelectEl.appendChild(optDefault);
-
-      entries.forEach(([cle, data]) => {
-        const opt = document.createElement('option');
-        opt.value = cle;
-        opt.textContent = data.nomOriginal;
-        inviteSelectEl.appendChild(opt);
-      });
-
-      inviteSelectEl.disabled = entries.length === 0;
-      btnReveler.disabled = entries.length === 0;
-    }
-
-    // --------- Affichage infos tirage ---------
-
-    function afficherInfoGeneration(meta) {
-      metaTirage = meta;
-      const {
-        totalInvites,
-        coreCount,
-        nbHF,
-        nbUnisexes,
-        nbOrphelins,
-        nbExtraPairs,
-        nbExtraOrphelins
-      } = meta;
-
-      let html = '';
-      html += `<div class="result-highlight">Tirage prêt ✅</div>`;
-      html += `<div>${totalInvites} invité(s) au total.</div>`;
-      html += `<div>${coreCount} invité(s) en tirage aléatoire (jusqu'au 12e).</div>`;
-      if (totalInvites > coreCount) {
-        html += `<div>${totalInvites - coreCount} invité(s) en mode couleurs fixes (après 12).</div>`;
-      }
-
-      html += `<div style="margin-top:0.4rem;">`;
-      html += `<span class="badge badge-good">${nbHF} paire(s) H/F (aléatoires)</span>`;
-      html += `<span class="badge badge-warn">${nbUnisexes} paire(s) unisexes (aléatoires)</span>`;
-      html += `<span class="badge ${nbOrphelins ? 'badge-bad' : 'badge-good'}">${nbOrphelins} orphelin(s) (aléatoires)</span>`;
-      if (nbExtraPairs > 0 || nbExtraOrphelins > 0) {
-        html += `<span class="badge badge-good">${nbExtraPairs} paire(s) fixes après 12</span>`;
-        html += `<span class="badge ${nbExtraOrphelins ? 'badge-warn' : 'badge-good'}">${nbExtraOrphelins} orphelin(s) après 12</span>`;
-      }
-      html += `</div>`;
-
-      html += `<div class="small-muted" style="margin-top:0.5rem;">
-        Les couleurs des 12 premiers invités sont tirées au sort, avec priorité aux paires H/F.<br>
-        Au-delà de 12, les couleurs sont attribuées séquentiellement par paire de 2
-        en suivant l'ordre de la liste de couleurs.
-      </div>`;
-
-      infoGen.style.display = 'block';
-      infoGen.innerHTML = html;
-    }
-
-    function afficherInfoGenerationRecharge() {
-      const totalRestants = Object.keys(assignations).length;
-      if (!metaTirage) {
-        infoGen.style.display = 'block';
-        infoGen.innerHTML = `
-          <div class="result-highlight">Tirage chargé ✅</div>
-          <div>${totalRestants} invité(s) actuellement configurés.</div>
-          <div class="small-muted" style="margin-top:0.5rem;">
-            Ce tirage vient d’un précédent lancement. Les couleurs restent les mêmes
-            qu’avant le rechargement de la page.
-          </div>
-        `;
-        return;
-      }
-
-      const {
-        totalInvites,
-        coreCount,
-        nbHF,
-        nbUnisexes,
-        nbOrphelins,
-        nbExtraPairs,
-        nbExtraOrphelins
-      } = metaTirage;
-
-      let html = '';
-      html += `<div class="result-highlight">Tirage chargé ✅</div>`;
-      html += `<div>${totalInvites} invité(s) au total à l’origine.</div>`;
-      html += `<div>${totalRestants} invité(s) configurés dans ce navigateur.</div>`;
-      html += `<div>${coreCount} invité(s) en tirage aléatoire (jusqu'au 12e).</div>`;
-      if (totalInvites > coreCount) {
-        html += `<div>${totalInvites - coreCount} invité(s) en mode couleurs fixes (après 12).</div>`;
-      }
-
-      html += `<div style="margin-top:0.4rem;">`;
-      html += `<span class="badge badge-good">${nbHF} paire(s) H/F (aléatoires)</span>`;
-      html += `<span class="badge badge-warn">${nbUnisexes} paire(s) unisexes (aléatoires)</span>`;
-      html += `<span class="badge ${nbOrphelins ? 'badge-bad' : 'badge-good'}">${nbOrphelins} orphelin(s) (aléatoires)</span>`;
-      if (nbExtraPairs > 0 || nbExtraOrphelins > 0) {
-        html += `<span class="badge badge-good">${nbExtraPairs} paire(s) fixes après 12</span>`;
-        html += `<span class="badge ${nbExtraOrphelins ? 'badge-warn' : 'badge-good'}">${nbExtraOrphelins} orphelin(s) après 12</span>`;
-      }
-      html += `</div>`;
-
-      html += `<div class="small-muted" style="margin-top:0.5rem;">
-        Tirage récupéré depuis le stockage du navigateur : recharger la page ne change pas les couleurs.
-      </div>`;
-
-      infoGen.style.display = 'block';
-      infoGen.innerHTML = html;
-    }
-
-    // --------- Génération du tirage ---------
-
-    btnGenerer.addEventListener('click', () => {
-      const hommesBrut = nettoyerListeBrute(hommesEl.value);
-      const femmesBrut = nettoyerListeBrute(femmesEl.value);
-      const couleursBrut = nettoyerListeBrute(couleursEl.value);
-
-      zoneRevelation.style.display = 'none';
-      zoneRevelation.innerHTML = '';
-
-      if (hommesBrut.length === 0 && femmesBrut.length === 0) {
-        infoGen.style.display = 'block';
-        infoGen.innerHTML = '<span class="error">⚠️ Tu dois saisir au moins un homme ou une femme.</span>';
-        tirageActif = false;
-        btnReveler.disabled = true;
-        inviteSelectEl.disabled = true;
-        assignations = {};
-        effacerTirage();
-        return;
-      }
-
-      if (couleursBrut.length === 0) {
-        infoGen.style.display = 'block';
-        infoGen.innerHTML = '<span class="error">⚠️ Tu dois saisir au moins une couleur.</span>';
-        tirageActif = false;
-        btnReveler.disabled = true;
-        inviteSelectEl.disabled = true;
-        assignations = {};
-        effacerTirage();
-        return;
-      }
-
-      // Liste complète des invités dans l’ordre : d’abord H, puis F
-      const hommes = hommesBrut.map(n => ({ nom: n, genre: 'H' }));
-      const femmes = femmesBrut.map(n => ({ nom: n, genre: 'F' }));
-      const tous = [...hommes, ...femmes];
-      const totalInvites = tous.length;
-
-      const coreCount = Math.min(12, totalInvites);
-      const coreGuests = tous.slice(0, coreCount);
-      const extraGuests = tous.slice(coreCount);
-
-      // --- 1) Tirage aléatoire pour les 12 premiers ---
-
-      const hommesCore = coreGuests.filter(g => g.genre === 'H').map(g => g.nom);
-      const femmesCore = coreGuests.filter(g => g.genre === 'F').map(g => g.nom);
-
-      const hommesMelanges = shuffle([...hommesCore]);
-      const femmesMelangees = shuffle([...femmesCore]);
-
-      const unitesCore = []; // {membres:[nom1, nom2?], type:'HF'|'HH'|'FF'|'UNISEXE'|'ORPHELIN'}
-      let nbHF = 0;
-      let nbUnisexes = 0;
-      let nbOrphelins = 0;
-
-      while (hommesMelanges.length > 0 && femmesMelangees.length > 0) {
-        const h = hommesMelanges.pop();
-        const f = femmesMelangees.pop();
-        unitesCore.push({ membres: [h, f], type: 'HF' });
-        nbHF++;
-      }
-
-      let restants = [];
-      const restantsH = [...hommesMelanges];
-      const restantsF = [...femmesMelangees];
-      restants = restants.concat(restantsH).concat(restantsF);
-      shuffle(restants);
-
-      while (restants.length >= 2) {
-        const a = restants.pop();
-        const b = restants.pop();
-        let type = 'UNISEXE';
-        if (hommesCore.includes(a) && hommesCore.includes(b)) type = 'HH';
-        else if (femmesCore.includes(a) && femmesCore.includes(b)) type = 'FF';
-        unitesCore.push({ membres: [a, b], type });
-        nbUnisexes++;
-      }
-
-      if (restants.length === 1) {
-        const seul = restants.pop();
-        unitesCore.push({ membres: [seul], type: 'ORPHELIN' });
-        nbOrphelins++;
-      }
-
-      // --- 2) Invités supplémentaires (après 12) : paires fixes ---
-
-      const unitesExtra = []; // {membres:[nom1, nom2?], type:'EXTRA_PAIR'|'EXTRA_ORPHELIN'}
-      let nbExtraPairs = 0;
-      let nbExtraOrphelins = 0;
-
-      for (let i = 0; i < extraGuests.length; i += 2) {
-        const g1 = extraGuests[i];
-        const g2 = extraGuests[i + 1];
-        if (g2) {
-          unitesExtra.push({ membres: [g1.nom, g2.nom], type: 'EXTRA_PAIR' });
-          nbExtraPairs++;
-        } else {
-          unitesExtra.push({ membres: [g1.nom], type: 'EXTRA_ORPHELIN' });
-          nbExtraOrphelins++;
-        }
-      }
-
-      // --- 3) Assignations (couleurs + partenaire) ---
-
-      assignations = {};
-
-      // 3a) Couleurs aléatoires pour les unités core
-      unitesCore.forEach(unite => {
-        const couleur = randomFromArray(couleursBrut);
-        const [m1, m2] = unite.membres;
-        if (m1 && m2) {
-          assignations[normaliserNom(m1)] = {
-            nomOriginal: m1,
-            couleur,
-            partenaire: m2,
-            revealed: false
-          };
-          assignations[normaliserNom(m2)] = {
-            nomOriginal: m2,
-            couleur,
-            partenaire: m1,
-            revealed: false
-          };
-        } else if (m1) {
-          assignations[normaliserNom(m1)] = {
-            nomOriginal: m1,
-            couleur,
-            partenaire: null,
-            revealed: false
-          };
-        }
-      });
-
-      // 3b) Couleurs séquentielles pour les unités extra (au-delà de 12)
-      let indexPair = 0;
-
-      unitesExtra.forEach(unite => {
-        let couleur;
-        if (indexPair < couleursBrut.length) {
-          couleur = couleursBrut[indexPair];
-        } else {
-          const numAuto = indexPair + 1;
-          couleur = `Couleur ${numAuto}`;
-        }
-        indexPair++;
-
-        const [m1, m2] = unite.membres;
-        if (m1 && m2) {
-          assignations[normaliserNom(m1)] = {
-            nomOriginal: m1,
-            couleur,
-            partenaire: m2,
-            revealed: false
-          };
-          assignations[normaliserNom(m2)] = {
-            nomOriginal: m2,
-            couleur,
-            partenaire: m1,
-            revealed: false
-          };
-        } else if (m1) {
-          assignations[normaliserNom(m1)] = {
-            nomOriginal: m1,
-            couleur,
-            partenaire: null,
-            revealed: false
-          };
-        }
-      });
-
-      tirageActif = true;
-      btnReveler.disabled = false;
-      inviteSelectEl.disabled = false;
-
-      const meta = {
-        totalInvites,
-        coreCount,
-        nbHF,
-        nbUnisexes,
-        nbOrphelins,
-        nbExtraPairs,
-        nbExtraOrphelins
-      };
-      afficherInfoGeneration(meta);
-
-      remplirListeInvites();
-      sauvegarderTirage();
-    });
-
-    // --------- Révéler la couleur ---------
-
-    btnReveler.addEventListener('click', () => {
-      if (!tirageActif) {
-        zoneRevelation.style.display = 'block';
-        zoneRevelation.innerHTML = '<span class="error">⚠️ Aucun tirage actif. Demande à l’organisateur de lancer le tirage.</span>';
-        return;
-      }
-
-      const cle = inviteSelectEl.value;
-      if (!cle) {
-        zoneRevelation.style.display = 'block';
-        zoneRevelation.innerHTML = '<span class="error">⚠️ Merci de sélectionner ton prénom.</span>';
-        return;
-      }
-
-      const data = assignations[cle];
-      if (!data) {
-        zoneRevelation.style.display = 'block';
-        zoneRevelation.innerHTML = `<span class="error">⚠️ Ce nom n’est pas connu dans ce navigateur.</span>`;
-        return;
-      }
-
-      const { nomOriginal, couleur, partenaire, revealed } = data;
-
-      let html = '';
-      html += `<div class="result-highlight">Ta couleur pour la soirée</div>`;
-      html += `<div style="margin-bottom:0.4rem;">Bonjour <strong>${nomOriginal}</strong> 👋</div>`;
-      if (revealed) {
-        html += `<div class="small-muted" style="margin-bottom:0.4rem;">
-          Tu avais déjà vu ta couleur, la voici à nouveau :
-        </div>`;
-      } else {
-        html += `<div class="small-muted" style="margin-bottom:0.4rem;">
-          Voici ta couleur secrète. Elle restera la même si tu reviens sur ce site avec ce téléphone / navigateur.
-        </div>`;
-      }
-
-      html += `<div>Ta couleur est :</div>`;
-      html += `<div style="margin-top:0.5rem; font-size:1.35rem; font-weight:800;">
-        ${couleur}
-        <span class="color-preview">●</span>
-      </div>`;
-
-      if (partenaire) {
-        html += `<div style="margin-top:0.7rem;">
-          🤝 Tu es en paire avec : <strong>${partenaire}</strong>
-        </div>`;
-      } else {
-        html += `<div style="margin-top:0.7rem;">
-          🤝 Cette fois, tu n’as pas de partenaire attitré. Tu es en mode solo ✨
-        </div>`;
-      }
-
-      html += `<div class="small-muted" style="margin-top:0.7rem;">
-        Cette info est mémorisée dans ce navigateur uniquement. Sur un autre téléphone, le site ne te reconnaîtra pas.
-      </div>`;
-
-      zoneRevelation.style.display = 'block';
-      zoneRevelation.innerHTML = html;
-
-      // Marquer comme "déjà révélé", mais ne pas supprimer
-      data.revealed = true;
-      assignations[cle] = data;
-      sauvegarderTirage();
-
-      // On laisse l’info visible (pas de fade-out auto).
-    });
-
-    // --------- Reset complet ---------
-
-    btnReset.addEventListener('click', () => {
-      assignations = {};
-      tirageActif = false;
-      metaTirage = null;
-      effacerTirage();
-      btnReveler.disabled = true;
-      inviteSelectEl.disabled = true;
-      inviteSelectEl.innerHTML = '<option value="">— Attente d’un tirage —</option>';
-      infoGen.style.display = 'none';
-      zoneRevelation.style.display = 'none';
-      zoneRevelation.innerHTML = '';
-    });
-
-    // --------- Init au chargement ---------
-
-    chargerTirage();
-  </script>
-</body>
-</html>
+<meta charset="UTF-8" />
+<title>Couleur Soirée</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+/* ---------------------------------------------------------
+   🎉 THEME FESTIF + CONFETTIS + PAILLETTES SCINTILLANTES P1
+--------------------------------------------------------- */
+
+:root {
+  --bg1: #ffe4e6;
+  --bg2: #fef9c3;
+  --bg3: #e0f2fe;
+  --text: #111827;
+  --muted: #6b7280;
+  --card-bg: rgba(255,255,255,0.85);
+  --card-border: rgba(148,163,184,0.6);
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+  color: var(--text);
+  overflow-x: hidden;
+  position: relative;
+  padding: 1.4rem;
+}
+
+/* Confettis animés */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -100px;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,0,120,0.4) 0, transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(0,140,255,0.35) 0, transparent 55%),
+    radial-gradient(circle at 30% 80%, rgba(0,200,140,0.4) 0, transparent 55%),
+    radial-gradient(circle at 70% 75%, rgba(255,210,0,0.4) 0, transparent 55%);
+  background-size: 260px 260px;
+  animation: confettiMove 30s linear infinite alternate;
+  z-index: -2;
+  opacity: 0.7;
+}
+
+@keyframes confettiMove {
+  0% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(40px,-40px,0); }
+  100% { transform: translate3d(-40px,40px,0); }
+}
+
+/* ✨ Paillettes scintillantes P1 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.8) 0, transparent 60%),
+    radial-gradient(circle, rgba(255,255,255,0.7) 0, transparent 60%),
+    radial-gradient(circle, rgba(255,255,255,0.5) 0, transparent 60%);
+  background-size: 4px 4px, 6px 6px, 3px 3px;
+  mix-blend-mode: lighten;
+  animation: sparkles 3s infinite ease-in-out alternate;
+  z-index: -1;
+  opacity: 0.35;
+}
+
+@keyframes sparkles {
+  0% { opacity: 0.25; transform: scale(1); }
+  100% { opacity: 0.45; transform: scale(1.04); }
+}
+
+/* ---------------------- UI ---------------------- */
+
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  margin-bottom: 1.4rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 800;
+  background: linear-gradient(90deg,#ec4899,#f59e0b,#10b981,#3b82f6);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+select, input[type=text] {
+  width: 100%;
+  border-radius: 0.7rem;
+  border: 1px solid #cbd5e1;
+  padding: 0.6rem;
+  margin-bottom: 0.8rem;
+  font-si

@@ -1,468 +1,255 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Couleur Soirée (Cloud)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    /* -------- Thème festif clair + confettis + paillettes -------- */
+<meta charset="UTF-8">
+<title>Couleur de la soirée</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    :root {
-      --bg1: #ffe4e6;
-      --bg2: #fef9c3;
-      --bg3: #e0f2fe;
-      --text: #111827;
-      --muted: #6b7280;
-      --card-bg: rgba(255,255,255,0.88);
-      --card-border: rgba(148,163,184,0.7);
-    }
+<style>
+:root {
+  --bg1: #0f172a;
+  --bg2: #020617;
+  --card: #ffffff;
+  --text-main: #020617;
+  --text-soft: #475569;
+  --accent: #6366f1;
+}
 
-    * { box-sizing: border-box; }
+* { box-sizing: border-box; }
 
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
-      color: var(--text);
-      overflow-x: hidden;
-      position: relative;
-      padding: 1.4rem;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+  color: var(--text-main);
+}
 
-    /* Confettis */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: -100px;
-      background-image:
-        radial-gradient(circle at 20% 20%, rgba(255,0,120,0.4) 0, transparent 55%),
-        radial-gradient(circle at 80% 30%, rgba(0,140,255,0.35) 0, transparent 55%),
-        radial-gradient(circle at 30% 80%, rgba(0,200,140,0.4) 0, transparent 55%),
-        radial-gradient(circle at 70% 75%, rgba(255,210,0,0.4) 0, transparent 55%);
-      background-size: 260px 260px;
-      animation: confettiMove 30s linear infinite alternate;
-      z-index: -2;
-      opacity: 0.75;
-      pointer-events: none;
-    }
+.container {
+  width: 100%;
+  max-width: 700px;
+}
 
-    @keyframes confettiMove {
-      0% { transform: translate3d(0,0,0); }
-      50% { transform: translate3d(40px,-40px,0); }
-      100% { transform: translate3d(-40px,40px,0); }
-    }
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.4rem;
+}
 
-    /* Paillettes scintillantes P1 */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.9) 0, transparent 60%),
-        radial-gradient(circle, rgba(255,255,255,0.7) 0, transparent 60%),
-        radial-gradient(circle, rgba(255,255,255,0.5) 0, transparent 60%);
-      background-size: 4px 4px, 6px 6px, 3px 3px;
-      mix-blend-mode: lighten;
-      animation: sparkles 3s infinite ease-in-out alternate;
-      z-index: -1;
-      opacity: 0.3;
-    }
+.subtitle {
+  text-align: center;
+  color: #cbd5f5;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
 
-    @keyframes sparkles {
-      0% { opacity: 0.22; transform: scale(1); }
-      100% { opacity: 0.45; transform: scale(1.04); }
-    }
+.card {
+  background: var(--card);
+  border-radius: 1.2rem;
+  padding: 1.3rem 1.5rem;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
+.counter {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+  margin-bottom: 1rem;
+}
 
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 800;
-      background: linear-gradient(90deg,#ec4899,#f59e0b,#10b981,#3b82f6);
-      -webkit-background-clip: text;
-      color: transparent;
-      margin-bottom: 0.3rem;
-    }
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  display: block;
+}
 
-    .subtitle {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-    }
+select, input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.7rem;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 0.9rem;
+  font-size: 0.95rem;
+}
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 1rem;
-      border: 1px solid var(--card-border);
-      padding: 1.2rem 1.4rem;
-      box-shadow: 0 12px 30px rgba(15,23,42,0.18);
-      backdrop-filter: blur(14px);
-    }
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
 
-    label {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 0.25rem;
-      display: block;
-    }
+button {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  background: linear-gradient(135deg,#6366f1,#4338ca);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(99,102,241,0.45);
+}
 
-    select, input[type="text"] {
-      width: 100%;
-      border-radius: 0.7rem;
-      border: 1px solid #cbd5e1;
-      padding: 0.55rem 0.7rem;
-      margin-bottom: 0.8rem;
-      font-size: 0.95rem;
-    }
+.result {
+  margin-top: 1rem;
+  background: #f8fafc;
+  border-radius: 0.9rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+}
 
-    select:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 1px #6366f1;
-      background: #ffffff;
-    }
-
-    button {
-      padding: 0.55rem 1.2rem;
-      border-radius: 999px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      color: white;
-      background: linear-gradient(135deg,#6366f1,#ec4899);
-      box-shadow: 0 8px 20px rgba(99,102,241,0.35);
-      font-size: 0.95rem;
-    }
-
-    button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .counter {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #374151;
-      margin-bottom: 1rem;
-    }
-
-    .result-box {
-      margin-top: 1rem;
-      background: #ffffff;
-      border-radius: 0.85rem;
-      border: 1px solid #e5e7eb;
-      padding: 0.9rem 1rem;
-      font-size: 0.95rem;
-    }
-
-    .color-dot {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 1px solid #9ca3af;
-      margin-left: 5px;
-      background: white;
-    }
-
-    @media (max-width: 640px) {
-      body { padding: 1rem; }
-      .card { padding: 1rem 1.1rem; }
-    }
-  </style>
+.color-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #64748b;
+  margin-left: 6px;
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>🎉 Couleur de la Soirée (Cloud)</h1>
-    <p class="subtitle">
-      Choisis ton prénom dans la liste ou entre ton prénom si tu n’y es pas.  
-      Ta couleur et ta paire sont partagées sur tous les téléphones ✨
-    </p>
+<div class="container">
 
-    <div id="counter" class="counter">Chargement du compteur…</div>
+<h1>🎉 Couleur de la soirée</h1>
+<p class="subtitle">
+Choisis ton prénom ou saisis-le pour découvrir ta couleur.<br>
+Tu peux revenir plus tard : elle ne changera pas.
+</p>
 
-    <div class="card">
-      <label for="sel">Invité(e) dans la liste :</label>
-      <select id="sel">
-        <option value="">— Sélectionne ton prénom —</option>
-      </select>
+<div id="counter" class="counter">Chargement…</div>
 
-      <label for="extra">Ou entre ton prénom si tu n’es pas dans la liste :</label>
-      <input type="text" id="extra" placeholder="Tape ton prénom ici…" />
+<div class="card">
 
-      <button id="btn">Voir ma couleur</button>
+<label>Prénom dans la liste</label>
+<select id="selectName">
+  <option value="">— Sélectionne ton prénom —</option>
+</select>
 
-      <div id="result" class="result-box" style="display:none;"></div>
-    </div>
-  </div>
+<label>Ou entre ton prénom</label>
+<input id="inputName" placeholder="Ton prénom">
 
-  <!-- Firebase via CDN (SDK modular v12) -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js';
-    import {
-      getDatabase,
-      ref,
-      get,
-      set,
-      update,
-      onValue,
-      runTransaction
-    } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js';
+<button id="btn">Voir ma couleur</button>
 
-    // ⚠️ IMPORTANT : mets ICI l’URL exacte de ta Realtime Database.
-    // Tu la vois dans Firebase → Realtime Database → onglet "Data" → "Database URL".
-    // Exemple de format (NE COLLE PAS CET EXEMPLE, UTILISE LE TIEN) :
-    // https://ton-projet-default-rtdb.europe-west1.firebasedatabase.app
-    const firebaseConfig = {
-      apiKey: "AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
-      authDomain: "couleur-party-b315b.firebaseapp.com",
-      databaseURL: "https://console.firebase.google.com/project/couleur-party-b315b/database/couleur-party-b315b-default-rtdb/data/~2F",
-      projectId: "couleur-party-b315b",
-      storageBucket: "couleur-party-b315b.firebasestorage.app",
-      messagingSenderId: "420983408934",
-      appId: "1:420983408934:web:ad2c108cb13c480b0f19e7"
-    };
+<div id="result" class="result" style="display:none;"></div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+</div>
+</div>
 
-    // ------------- Données de base -------------
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import {
+  getDatabase, ref, get, set, update,
+  onValue, runTransaction
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-    const baseNames = [
-      "Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo",
-      "Camille","Anna","Sarah","Charlotte","Marie"
-    ];
+/* 🔴 REMPLACE JUSTE CETTE LIGNE */
+const firebaseConfig = {
+  apiKey: "AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
+  authDomain: "couleur-party-b315b.firebaseapp.com",
+  databaseURL: "https://couleur-party-b315b-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "couleur-party-b315b",
+  storageBucket: "couleur-party-b315b.firebasestorage.app",
+  messagingSenderId: "420983408934",
+  appId: "1:420983408934:web:ad2c108cb13c480b0f19e7"
+};
 
-    const baseColors = [
-      "Rouge Vif",
-      "Bleu Électrique",
-      "Vert Émeraude",
-      "Jaune Soleil",
-      "Orange",
-      "Rose Fushia",
-      "Violet Profond",
-      "Noir",
-      "Blanc Pur",
-      "Argenté / Gris Métallique"
-    ];
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    function normalizeName(name) {
-      return name
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, ""); // enlève les accents
-    }
+/* BASE */
+const baseNames = ["Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo","Camille","Anna","Sarah","Charlotte","Marie"];
+const colors = ["Rouge Vif","Bleu Électrique","Vert Émeraude","Jaune Soleil","Orange","Rose Fushia","Violet Profond","Noir","Blanc Pur","Argenté"];
 
-    function shuffle(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
+const select = document.getElementById("selectName");
+const input = document.getElementById("inputName");
+const result = document.getElementById("result");
 
-    // Génère des paires aléatoires pour la base (mais tu ne les vois pas 😉)
-    function generateBaseInvites() {
-      const shuffled = shuffle(baseNames);
-      const invites = {};
-      const units = [];
+/* Remplir la liste */
+baseNames.forEach(n=>{
+  const o=document.createElement("option");
+  o.value=n; o.textContent=n;
+  select.appendChild(o);
+});
 
-      while (shuffled.length >= 2) {
-        units.push([shuffled.pop(), shuffled.pop()]);
-      }
-      if (shuffled.length === 1) {
-        units.push([shuffled.pop()]);
-      }
-
-      units.forEach(unit => {
-        const color = baseColors[Math.floor(Math.random()*baseColors.length)];
-        if (unit.length === 2) {
-          const [n1, n2] = unit;
-          const k1 = normalizeName(n1);
-          const k2 = normalizeName(n2);
-          invites[k1] = { name: n1, color, partner: n2 };
-          invites[k2] = { name: n2, color, partner: n1 };
-        } else {
-          const [n1] = unit;
-          const k1 = normalizeName(n1);
-          invites[k1] = { name: n1, color, partner: null };
-        }
-      });
-
-      return invites;
-    }
-
-    // ------------- Compteur global -------------
-
-    const counterEl = document.getElementById("counter");
-
-    // Mise à jour en temps réel du compteur
-    onValue(ref(db, "counter"), (snap) => {
-      const c = snap.exists() ? snap.val() : 0;
-      counterEl.textContent = c + " personne" + (c > 1 ? "s ont" : " a") + " consulté sa couleur";
-    });
-
-    function incrementCounter() {
-      return runTransaction(ref(db, "counter"), (current) => {
-        return (current || 0) + 1;
-      });
-    }
-
-    // ------------- État pour les extras (après les 12) -------------
-
-    async function getState() {
-      const snap = await get(ref(db, "state"));
-      if (!snap.exists()) {
-        return { extraPending: null, nextExtraColorIndex: 0 };
-      }
-      return snap.val();
-    }
-
-    async function saveState(state) {
-      await set(ref(db, "state"), state);
-    }
-
-    function getExtraColor(idx) {
-      if (idx < baseColors.length) {
-        return baseColors[idx];
-      }
-      // Après la liste, générer Couleur 11, Couleur 12, etc.
-      return "Couleur " + (idx + 1);
-    }
-
-    // ------------- Initialisation de la base dans Firebase -------------
-
-    async function initializeBaseIfNeeded() {
-      const snap = await get(ref(db, "invites"));
-      if (!snap.exists()) {
-        // Première fois : on crée les 12 en base
-        const baseInvites = generateBaseInvites();
-        await set(ref(db, "invites"), baseInvites);
-        await set(ref(db, "state"), { extraPending: null, nextExtraColorIndex: 0 });
-        await set(ref(db, "counter"), 0);
-      }
-    }
-
-    // ------------- Gestion des invités -------------
-
-    async function getInviteByKey(key) {
-      const snap = await get(ref(db, "invites/" + key));
-      return snap.exists() ? snap.val() : null;
-    }
-
-    async function handleExtraInvite(name, key) {
-      // Lecture de l'état extra
-      let state = await getState();
-      if (!state.extraPending) {
-        // Premier d'une nouvelle paire
-        const idx = state.nextExtraColorIndex || 0;
-        const color = getExtraColor(idx);
-        state.extraPending = { key, name, color };
-        state.nextExtraColorIndex = idx + 1;
-
-        await Promise.all([
-          set(ref(db, "invites/" + key), { name, color, partner: null }),
-          saveState(state)
-        ]);
-
-        return { name, color, partner: null };
+/* Initialisation unique */
+async function init() {
+  const snap = await get(ref(db,"invites"));
+  if (!snap.exists()) {
+    const shuffled = [...baseNames].sort(()=>Math.random()-0.5);
+    const invites = {};
+    for(let i=0;i<shuffled.length;i+=2){
+      const c = colors[Math.floor(Math.random()*colors.length)];
+      const a = shuffled[i], b = shuffled[i+1];
+      if(b){
+        invites[a]={name:a,color:c,partner:b};
+        invites[b]={name:b,color:c,partner:a};
       } else {
-        // Deuxième de la paire → on le relie à l'orphelin
-        const pending = state.extraPending;
-        const color = pending.color;
-        state.extraPending = null;
-
-        await Promise.all([
-          set(ref(db, "invites/" + key), { name, color, partner: pending.name }),
-          update(ref(db, "invites/" + pending.key), { partner: name }),
-          saveState(state)
-        ]);
-
-        return { name, color, partner: pending.name };
+        invites[a]={name:a,color:c,partner:null};
       }
     }
+    await set(ref(db,"invites"),invites);
+    await set(ref(db,"state"),{pending:null,index:0});
+    await set(ref(db,"counter"),0);
+  }
+}
+init();
 
-    // ------------- UI -------------
+/* Compteur */
+onValue(ref(db,"counter"),s=>{
+  const c=s.val()||0;
+  document.getElementById("counter").textContent =
+    c+" personne"+(c>1?"s ont":" a")+" révélé sa couleur";
+});
 
-    const sel = document.getElementById("sel");
-    const extraInput = document.getElementById("extra");
-    const btn = document.getElementById("btn");
-    const resultBox = document.getElementById("result");
+/* Utils */
+const keyOf=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-    // Remplir la liste déroulante avec les 12 noms de base
-    function fillSelect() {
-      baseNames.forEach(n => {
-        const opt = document.createElement("option");
-        opt.value = n;
-        opt.textContent = n;
-        sel.appendChild(opt);
-      });
+/* Bouton */
+document.getElementById("btn").onclick=async()=>{
+  const name=select.value||input.value.trim();
+  if(!name) return alert("Entre ton prénom");
+
+  const key=keyOf(name);
+  const snap=await get(ref(db,"invites/"+key));
+  let data;
+
+  if(snap.exists()){
+    data=snap.val();
+  } else {
+    const st=(await get(ref(db,"state"))).val();
+    const col=colors[st.index]||("Couleur "+(st.index+1));
+    if(!st.pending){
+      await set(ref(db,"invites/"+key),{name,color:col,partner:null});
+      await set(ref(db,"state"),{pending:{key,name,col},index:st.index+1});
+      data={name,color:col,partner:null};
+    } else {
+      await set(ref(db,"invites/"+key),{name,color:st.pending.col,partner:st.pending.name});
+      await update(ref(db,"invites/"+st.pending.key),{partner:name});
+      await set(ref(db,"state"),{pending:null,index:st.index});
+      data={name,color:st.pending.col,partner:st.pending.name};
     }
+  }
 
-    function showResult(displayName, color, partner) {
-      resultBox.style.display = "block";
-      resultBox.innerHTML = `
-        <div><strong>${displayName}</strong>, ta couleur pour la soirée est :</div>
-        <div style="font-size:1.3rem;font-weight:700;margin:0.3rem 0;">
-          ${color}
-          <span class="color-dot"></span>
-        </div>
-        <div>
-          ${
-            partner
-              ? "🤝 Tu es en paire avec <strong>" + partner + "</strong>."
-              : "✨ Tu es en solo, sans partenaire attitré."
-          }
-        </div>
-        <div style="margin-top:0.5rem;font-size:0.8rem;color:#6b7280;">
-          Cette info est enregistrée dans le cloud : tu retrouveras la même couleur
-          depuis n’importe quel téléphone en entrant le même prénom.
-        </div>
-      `;
-    }
+  await runTransaction(ref(db,"counter"),v=>(v||0)+1);
 
-    btn.addEventListener("click", async () => {
-      let rawName = sel.value || extraInput.value.trim();
-      if (!rawName) {
-        alert("Merci de sélectionner ou d’entrer ton prénom.");
-        return;
-      }
-
-      const key = normalizeName(rawName);
-      let invite = await getInviteByKey(key);
-
-      if (!invite) {
-        // Nouveau nom → traitement extra
-        invite = await handleExtraInvite(rawName, key);
-      }
-
-      // On incrémente le compteur une seule fois par clic
-      await incrementCounter();
-
-      showResult(invite.name || rawName, invite.color, invite.partner || null);
-    });
-
-    // ------------- Lancement -------------
-
-    (async () => {
-      try {
-        await initializeBaseIfNeeded();
-        fillSelect();
-      } catch (e) {
-        console.error("Erreur d'initialisation Firebase :", e);
-        counterEl.textContent = "Erreur de connexion à la base (Firebase).";
-      }
-    })();
-  </script>
+  result.style.display="block";
+  result.innerHTML=`
+    <strong>${data.name}</strong>, ta couleur est :
+    <div style="font-size:1.2rem;font-weight:700;margin:0.3rem 0;">
+      ${data.color}<span class="color-dot"></span>
+    </div>
+    ${data.partner?`🤝 En paire avec <strong>${data.partner}</strong>`:"✨ En solo"}
+  `;
+};
+</script>
 </body>
 </html>

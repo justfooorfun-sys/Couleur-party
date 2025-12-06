@@ -1,119 +1,522 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Couleur de la soirée</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Couleur Soirée</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --accent: #6366f1;
+      --accent2: #ec4899;
+      --text: #111827;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+    }
 
-<link rel="icon" type="image/png" href="logo.png">
+    * { box-sizing: border-box; }
 
-<style>
-:root{
-  --bg1:#0f172a;
-  --bg2:#020617;
-  --card:#0b1220;
-  --border:#1f2937;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-  --accent:#6366f1;
-}
-*{box-sizing:border-box}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fee2e2 0, transparent 55%), 
+                  radial-gradient(circle at bottom, #dbeafe 0, transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      padding: 1.5rem;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:radial-gradient(circle at top,#1e293b,var(--bg2));
-  font-family:system-ui,-apple-system;
-  display:flex;
-  justify-content:center;
-  padding:1.3rem;
-  color:var(--text);
-}
-.container{width:100%;max-width:480px}
-h1{
-  text-align:center;
-  font-weight:900;
-  margin:.4rem 0 .2rem;
-  background:linear-gradient(90deg,#f97316,#22c55e,#3b82f6,#ec4899);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-.subtitle{
-  text-align:center;
-  font-size:.88rem;
-  color:var(--muted);
-  margin-bottom:1rem;
-}
-.counter{
-  text-align:center;
-  font-size:.85rem;
-  color:var(--muted);
-  margin-bottom:.7rem;
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:1rem;
-  padding:1.1rem;
-  box-shadow:0 20px 40px rgba(0,0,0,.55);
-}
-label{
-  display:block;
-  font-weight:600;
-  font-size:.9rem;
-  margin-bottom:.25rem;
-}
-select,input{
-  width:100%;
-  background:#020617;
-  color:var(--text);
-  border:1px solid #334155;
-  border-radius:.6rem;
-  padding:.55rem .7rem;
-  margin-bottom:.75rem;
-}
-button{
-  width:100%;
-  border:none;
-  border-radius:999px;
-  padding:.6rem;
-  background:linear-gradient(135deg,#6366f1,#4338ca);
-  color:white;
-  font-weight:700;
-  cursor:pointer;
-}
-.result{
-  margin-top:1rem;
-  background:#020617;
-  border:1px solid #334155;
-  border-radius:.75rem;
-  padding:.9rem;
-}
-.big{
-  font-size:1.2rem;
-  font-weight:800;
-}
-.small{
-  font-size:.8rem;
-  color:var(--muted);
-}
-</style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-align: center;
+      margin: 0 0 0.3rem 0;
+      background: linear-gradient(90deg, #ec4899, #f97316, #22c55e, #3b82f6);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: 1.2rem 1.4rem;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 30px rgba(15,23,42,0.12);
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      border-radius: 0.7rem;
+      border: 1px solid #cbd5e1;
+      padding: 0.55rem 0.7rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.95rem;
+    }
+
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+      background: #ffffff;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.3rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 8px 20px rgba(99,102,241,0.35);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .counter {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .result-box {
+      margin-top: 1rem;
+      background: #f9fafb;
+      border-radius: 0.8rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .color-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0.3rem 0;
+    }
+
+    .color-dot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid #9ca3af;
+      margin-left: 6px;
+      background: white;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      .card { padding: 1rem 1.1rem; }
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
-<h1>Couleur de la soirée</h1>
-<p class="subtitle">Entre ton prénom pour découvrir ta couleur 🎉</p>
-<div id="counter" class="counter">Chargement…</div>
+  <div class="container">
+    <h1>Couleur de la Soirée</h1>
+    <p class="subtitle">
+      Choisis ton prénom dans la liste, ou entre-le si tu n’y es pas.  
+      Ta couleur et ta paire seront les mêmes sur tous les téléphones.
+    </p>
 
-<div class="card">
-<label>Prénom dans la liste</label>
-<select id="sel">
-<option value="">— Sélectionne ton prénom —</option>
-</select>
+    <div id="counter" class="counter">Chargement…</div>
 
-<label>Ou entre ton prénom</label>
-<input id="extra" placeholder="Ton prénom">
+    <div class="card">
+      <label for="sel">Invité(e) dans la liste :</label>
+      <select id="sel">
+        <option value="">— Sélectionne ton prénom —</option>
+      </select>
 
-<button id="btn">Voir ma couleur</button>
-<div id="result" class="result" style="display
+      <label for="extra">Ou entre ton prénom si tu n’es pas dans la liste :</label>
+      <input type="text" id="extra" placeholder="Ex : Diego" />
+
+      <button id="btn">Voir ma couleur</button>
+
+      <div id="result" class="result-box" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Firebase + logique -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      set,
+      update,
+      onValue,
+      runTransaction
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+
+    // ✅ Config avec ton vrai projet + databaseURL
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
+      authDomain: "couleur-party-b315b.firebaseapp.com",
+      databaseURL: "https://couleur-party-b315b-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "couleur-party-b315b",
+      storageBucket: "couleur-party-b315b.firebasestorage.app",
+      messagingSenderId: "420983408934",
+      appId: "1:420983408934:web:ad2c108cb13c480b0f19e7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 12 prénoms de base
+    const baseNames = [
+      "Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo",
+      "Camille","Anna","Sarah","Charlotte","Marie"
+    ];
+
+    // Couleurs (flash d’abord, puis neutres)
+    const baseColors = [
+      "Rouge Vif",
+      "Bleu Électrique",
+      "Vert Émeraude",
+      "Jaune Soleil",
+      "Orange",
+      "Rose Fushia",
+      "Violet Profond",
+      "Noir",
+      "Blanc Pur",
+      "Argenté / Gris Métallique"
+    ];
+    const flashLimit = 7; // 0..6 = flash
+
+    const sel = document.getElementById("sel");
+    const extraInput = document.getElementById("extra");
+    const btn = document.getElementById("btn");
+    const resultBox = document.getElementById("result");
+    const counterEl = document.getElementById("counter");
+
+    // Remplir la liste déroulante avec les 12 noms
+    function fillSelect() {
+      baseNames.forEach(n => {
+        const opt = document.createElement("option");
+        opt.value = n;
+        opt.textContent = n;
+        sel.appendChild(opt);
+      });
+    }
+    fillSelect();
+
+    function normalizeName(name) {
+      return name
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Récupérer / initialiser les meta
+    async function getMeta() {
+      const snap = await get(ref(db, "meta"));
+      if (!snap.exists()) {
+        return {
+          usedColors: {},       // { "Rouge Vif": true, ... }
+          extraColorCount: 0,   // pour "Couleur 11", "Couleur 12", etc.
+          pendingKey: null,
+          pendingName: null,
+          pendingColor: null,
+          initialized: false
+        };
+      }
+      return snap.val();
+    }
+
+    async function saveMeta(meta) {
+      await set(ref(db, "meta"), meta);
+    }
+
+    // Choix d’une nouvelle couleur : flash d’abord, puis neutres, puis "Couleur X"
+    function pickNewColor(meta) {
+      const used = meta.usedColors || {};
+      const availableFlash = [];
+      const availableNeutral = [];
+
+      baseColors.forEach((c, i) => {
+        if (!used[c]) {
+          if (i < flashLimit) availableFlash.push(c);
+          else availableNeutral.push(c);
+        }
+      });
+
+      let chosen;
+      if (availableFlash.length > 0) {
+        chosen = availableFlash[Math.floor(Math.random() * availableFlash.length)];
+      } else if (availableNeutral.length > 0) {
+        chosen = availableNeutral[Math.floor(Math.random() * availableNeutral.length)];
+      } else {
+        // Plus aucune couleur de base → générer une nouvelle couleur unique
+        const idx = (meta.extraColorCount || 0) + 1;
+        chosen = "Couleur " + idx;
+        meta.extraColorCount = idx;
+      }
+
+      if (!meta.usedColors) meta.usedColors = {};
+      meta.usedColors[chosen] = true;
+      return chosen;
+    }
+
+    // Générer les paires pour les 12 noms de base, avec couleurs pré-tirées
+    function generateBaseInvites(meta) {
+      const invites = {};
+      const shuffled = shuffle(baseNames);
+
+      while (shuffled.length >= 2) {
+        const n1 = shuffled.pop();
+        const n2 = shuffled.pop();
+        const color = pickNewColor(meta);
+
+        const k1 = normalizeName(n1);
+        const k2 = normalizeName(n2);
+
+        invites[k1] = {
+          name: n1,
+          color,
+          partnerKey: k2,
+          partnerName: n2,
+          base: true,
+          revealed: false
+        };
+        invites[k2] = {
+          name: n2,
+          color,
+          partnerKey: k1,
+          partnerName: n1,
+          base: true,
+          revealed: false
+        };
+      }
+
+      if (shuffled.length === 1) {
+        const n1 = shuffled.pop();
+        const color = pickNewColor(meta);
+        const k1 = normalizeName(n1);
+        invites[k1] = {
+          name: n1,
+          color,
+          partnerKey: null,
+          partnerName: null,
+          base: true,
+          revealed: false
+        };
+      }
+
+      return invites;
+    }
+
+    async function initializeBaseIfNeeded() {
+      const invitesSnap = await get(ref(db, "invites"));
+      let meta = await getMeta();
+
+      if (!invitesSnap.exists()) {
+        // Première fois : créer les 12 en base
+        const invites = generateBaseInvites(meta);
+        meta.initialized = true;
+        meta.pendingKey = null;
+        meta.pendingName = null;
+        meta.pendingColor = null;
+
+        await Promise.all([
+          set(ref(db, "invites"), invites),
+          saveMeta(meta),
+          set(ref(db, "revealedCount"), 0)
+        ]);
+      }
+    }
+
+    // Affichage du compteur global (uniquement les personnes qui ont révélé une fois)
+    onValue(ref(db, "revealedCount"), (snap) => {
+      const c = snap.exists() ? snap.val() : 0;
+      if (c === 0) {
+        counterEl.textContent = "Personne n’a encore révélé sa couleur";
+      } else if (c === 1) {
+        counterEl.textContent = "1 personne a révélé sa couleur";
+      } else {
+        counterEl.textContent = c + " personnes ont révélé leur couleur";
+      }
+    });
+
+    function showResult(displayName, color, partnerName) {
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `
+        <div><strong>${displayName}</strong>, ta couleur pour la soirée est :</div>
+        <div class="color-name">
+          ${color}
+          <span class="color-dot"></span>
+        </div>
+        <div>
+          ${
+            partnerName
+              ? "🤝 Tu es en paire avec <strong>" + partnerName + "</strong>."
+              : "✨ Tu es en solo, sans partenaire attitré."
+          }
+        </div>
+        <div style="margin-top:0.5rem;font-size:0.8rem;color:${'#6b7280'};">
+          Tu peux revenir sur cette page : ta couleur ne changera pas.
+        </div>
+      `;
+    }
+
+    async function incrementRevealedIfFirst(key) {
+      const inviteRef = ref(db, "invites/" + key);
+      const snap = await get(inviteRef);
+      if (!snap.exists()) return; // sécurité
+
+      const data = snap.val();
+      if (data.revealed) return;  // déjà compté
+
+      // Marquer comme révélé + incrémenter le compteur global
+      await Promise.all([
+        update(inviteRef, { revealed: true }),
+        runTransaction(ref(db, "revealedCount"), (current) => (current || 0) + 1)
+      ]);
+    }
+
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+
+      try {
+        await initializeBaseIfNeeded();
+
+        let rawName = sel.value || extraInput.value.trim();
+        if (!rawName) {
+          alert("Merci de sélectionner ou d’entrer ton prénom.");
+          btn.disabled = false;
+          return;
+        }
+
+        const key = normalizeName(rawName);
+        const inviteRef = ref(db, "invites/" + key);
+        let snap = await get(inviteRef);
+
+        if (snap.exists()) {
+          // Personne déjà connue (base ou extra)
+          const invite = snap.val();
+          await incrementRevealedIfFirst(key);
+          showResult(invite.name || rawName, invite.color, invite.partnerName || null);
+          btn.disabled = false;
+          return;
+        }
+
+        // Nouveau prénom → gestion des extras
+        let meta = await getMeta();
+
+        if (!meta.initialized) {
+          // Sécurité au cas où
+          await initializeBaseIfNeeded();
+          meta = await getMeta();
+        }
+
+        // 1er de la paire
+        if (!meta.pendingKey) {
+          const color = pickNewColor(meta);
+
+          const newInvite = {
+            name: rawName,
+            color,
+            partnerKey: null,
+            partnerName: null,
+            base: false,
+            revealed: false
+          };
+
+          meta.pendingKey = key;
+          meta.pendingName = rawName;
+          meta.pendingColor = color;
+
+          await Promise.all([
+            set(inviteRef, newInvite),
+            saveMeta(meta)
+          ]);
+
+          // C’est la première révélation pour cette personne
+          await incrementRevealedIfFirst(key);
+
+          showResult(rawName, color, null);
+          btn.disabled = false;
+          return;
+        }
+
+        // 2e de la paire → associer au pending
+        const pendingKey = meta.pendingKey;
+        const pendingName = meta.pendingName;
+        const color = meta.pendingColor;
+
+        const newInvite = {
+          name: rawName,
+          color,
+          partnerKey: pendingKey,
+          partnerName: pendingName,
+          base: false,
+          revealed: false
+        };
+
+        // Mise à jour du pending dans la base (son partenaire devient ce nouveau nom)
+        const pendingRef = ref(db, "invites/" + pendingKey);
+
+        await Promise.all([
+          set(inviteRef, newInvite),
+          update(pendingRef, { partnerKey: key, partnerName: rawName })
+        ]);
+
+        // Réinitialiser le pending
+        meta.pendingKey = null;
+        meta.pendingName = null;
+        meta.pendingColor = null;
+        await saveMeta(meta);
+
+        // Première révélation pour ce nouveau
+        await incrementRevealedIfFirst(key);
+
+        showResult(rawName, color, pendingName);
+        btn.disabled = false;
+      } catch (e) {
+        console.error(e);
+        alert("Erreur lors de la récupération de ta couleur. Vérifie ta connexion internet.");
+        btn.disabled = false;
+      }
+    });
+
+    // Au chargement : on s’assure que la base est prête
+    initializeBaseIfNeeded().catch(console.error);
+  </script>
+</body>
+</html>

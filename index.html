@@ -7,111 +7,100 @@
 
 <style>
 :root {
-  --bg1: #0f172a;
-  --bg2: #020617;
-  --card: #ffffff;
-  --text-main: #020617;
-  --text-soft: #475569;
-  --accent: #6366f1;
+  --bg1:#0f172a;
+  --bg2:#020617;
+  --card:#ffffff;
+  --accent:#6366f1;
 }
 
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(180deg, var(--bg1), var(--bg2));
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
-  display: flex;
-  justify-content: center;
-  padding: 1.5rem;
-  color: var(--text-main);
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  display:flex;
+  justify-content:center;
+  padding:1.5rem;
+  color:#020617
 }
 
-.container {
-  width: 100%;
-  max-width: 700px;
+.container{
+  width:100%;
+  max-width:720px
 }
 
-h1 {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 0.4rem;
+h1{
+  text-align:center;
+  font-size:1.8rem;
+  font-weight:800;
+  color:white;
+  margin-bottom:.3rem
 }
 
-.subtitle {
-  text-align: center;
-  color: #cbd5f5;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
+.subtitle{
+  text-align:center;
+  color:#cbd5f5;
+  font-size:.95rem;
+  margin-bottom:1.5rem
 }
 
-.card {
-  background: var(--card);
-  border-radius: 1.2rem;
-  padding: 1.3rem 1.5rem;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+.card{
+  background:var(--card);
+  border-radius:1.2rem;
+  padding:1.4rem 1.6rem;
+  box-shadow:0 25px 55px rgba(0,0,0,.45)
 }
 
-.counter {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #cbd5f5;
-  margin-bottom: 1rem;
+.counter{
+  text-align:center;
+  font-size:.85rem;
+  color:#cbd5f5;
+  margin-bottom:1rem
 }
 
-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 0.3rem;
-  display: block;
+label{
+  font-weight:600;
+  font-size:.9rem;
+  margin-bottom:.3rem;
+  display:block
 }
 
-select, input {
-  width: 100%;
-  padding: 0.55rem 0.7rem;
-  border-radius: 0.7rem;
-  border: 1px solid #cbd5e1;
-  margin-bottom: 0.9rem;
-  font-size: 0.95rem;
+select,input{
+  width:100%;
+  padding:.55rem .7rem;
+  border-radius:.7rem;
+  border:1px solid #cbd5e1;
+  margin-bottom:.9rem;
+  font-size:.95rem
 }
 
-select:focus, input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent);
+select:focus,input:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent)
 }
 
-button {
-  width: 100%;
-  padding: 0.7rem;
-  border-radius: 999px;
-  border: none;
-  font-weight: 700;
-  background: linear-gradient(135deg,#6366f1,#4338ca);
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 10px 30px rgba(99,102,241,0.45);
+button{
+  width:100%;
+  padding:.7rem;
+  border-radius:999px;
+  border:none;
+  font-weight:700;
+  background:linear-gradient(135deg,#6366f1,#4338ca);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 28px rgba(99,102,241,.45)
 }
 
-.result {
-  margin-top: 1rem;
-  background: #f8fafc;
-  border-radius: 0.9rem;
-  padding: 1rem;
-  border: 1px solid #e5e7eb;
-  font-size: 0.95rem;
-}
-
-.color-dot {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1px solid #64748b;
-  margin-left: 6px;
+.result{
+  margin-top:1rem;
+  background:#f8fafc;
+  border-radius:.9rem;
+  padding:1rem;
+  border:1px solid #e5e7eb;
+  font-size:.95rem
 }
 </style>
 </head>
@@ -146,108 +135,105 @@ Tu peux revenir plus tard : elle ne changera pas.
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import {
-  getDatabase, ref, get, set, update,
-  onValue, runTransaction
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getDatabase, ref, get, set, update, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-/* 🔴 REMPLACE JUSTE CETTE LIGNE */
-const firebaseConfig = {
-  apiKey: "AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
-  authDomain: "couleur-party-b315b.firebaseapp.com",
-  databaseURL: "https://couleur-party-b315b-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "couleur-party-b315b",
-  storageBucket: "couleur-party-b315b.firebasestorage.app",
-  messagingSenderId: "420983408934",
-  appId: "1:420983408934:web:ad2c108cb13c480b0f19e7"
+const firebaseConfig={
+  apiKey:"AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
+  authDomain:"couleur-party-b315b.firebaseapp.com",
+  databaseURL:"https://couleur-party-b315b-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"couleur-party-b315b",
+  storageBucket:"couleur-party-b315b.firebasestorage.app",
+  messagingSenderId:"420983408934",
+  appId:"1:420983408934:web:ad2c108cb13c480b0f19e7"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
 
 /* BASE */
-const baseNames = ["Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo","Camille","Anna","Sarah","Charlotte","Marie"];
-const colors = ["Rouge Vif","Bleu Électrique","Vert Émeraude","Jaune Soleil","Orange","Rose Fushia","Violet Profond","Noir","Blanc Pur","Argenté"];
+const baseNames=["Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo","Camille","Anna","Sarah","Charlotte","Marie"];
+const colors=["Rouge Vif","Bleu Électrique","Vert Émeraude","Jaune Soleil","Orange","Rose Fushia","Violet Profond","Noir","Blanc Pur","Argenté"];
 
-const select = document.getElementById("selectName");
-const input = document.getElementById("inputName");
-const result = document.getElementById("result");
+const select=document.getElementById("selectName");
+const input=document.getElementById("inputName");
+const result=document.getElementById("result");
 
-/* Remplir la liste */
 baseNames.forEach(n=>{
   const o=document.createElement("option");
-  o.value=n; o.textContent=n;
+  o.value=n;o.textContent=n;
   select.appendChild(o);
 });
 
-/* Initialisation unique */
-async function init() {
-  const snap = await get(ref(db,"invites"));
-  if (!snap.exists()) {
-    const shuffled = [...baseNames].sort(()=>Math.random()-0.5);
-    const invites = {};
-    for(let i=0;i<shuffled.length;i+=2){
-      const c = colors[Math.floor(Math.random()*colors.length)];
-      const a = shuffled[i], b = shuffled[i+1];
+const keyOf=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+
+/* INIT UNIQUE */
+async function init(){
+  const snap=await get(ref(db,"invites"));
+  if(!snap.exists()){
+    let shuffled=[...baseNames].sort(()=>Math.random()-0.5);
+    let invites={},waiting=null,ci=0;
+
+    while(shuffled.length){
+      let a=shuffled.pop(), b=shuffled.pop();
+      let c=colors[ci++]||("Couleur "+ci);
+      invites[keyOf(a)]={name:a,color:c,partner:b||null,revealed:false};
       if(b){
-        invites[a]={name:a,color:c,partner:b};
-        invites[b]={name:b,color:c,partner:a};
-      } else {
-        invites[a]={name:a,color:c,partner:null};
+        invites[keyOf(b)]={name:b,color:c,partner:a,revealed:false};
       }
     }
     await set(ref(db,"invites"),invites);
-    await set(ref(db,"state"),{pending:null,index:0});
-    await set(ref(db,"counter"),0);
+    await set(ref(db,"state"),{waiting:null,index:ci});
   }
 }
 init();
 
-/* Compteur */
-onValue(ref(db,"counter"),s=>{
-  const c=s.val()||0;
-  document.getElementById("counter").textContent =
-    c+" personne"+(c>1?"s ont":" a")+" révélé sa couleur";
+/* COMPTEUR = révélés uniquement */
+onValue(ref(db,"invites"),snap=>{
+  if(!snap.exists()){
+    counter.textContent="0 personne a révélé sa couleur";
+    return;
+  }
+  const revealed=Object.values(snap.val()).filter(v=>v.revealed).length;
+  counter.textContent=revealed+" personne"+(revealed>1?"s ont":" a")+" révélé sa couleur";
 });
 
-/* Utils */
-const keyOf=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-
-/* Bouton */
-document.getElementById("btn").onclick=async()=>{
+/* ACTION */
+btn.onclick=async()=>{
   const name=select.value||input.value.trim();
   if(!name) return alert("Entre ton prénom");
 
   const key=keyOf(name);
-  const snap=await get(ref(db,"invites/"+key));
+  const invSnap=await get(ref(db,"invites/"+key));
   let data;
 
-  if(snap.exists()){
-    data=snap.val();
-  } else {
-    const st=(await get(ref(db,"state"))).val();
-    const col=colors[st.index]||("Couleur "+(st.index+1));
-    if(!st.pending){
-      await set(ref(db,"invites/"+key),{name,color:col,partner:null});
-      await set(ref(db,"state"),{pending:{key,name,col},index:st.index+1});
-      data={name,color:col,partner:null};
-    } else {
-      await set(ref(db,"invites/"+key),{name,color:st.pending.col,partner:st.pending.name});
-      await update(ref(db,"invites/"+st.pending.key),{partner:name});
-      await set(ref(db,"state"),{pending:null,index:st.index});
-      data={name,color:st.pending.col,partner:st.pending.name};
+  if(invSnap.exists()){
+    data=invSnap.val();
+    if(!data.revealed){
+      await update(ref(db,"invites/"+key),{revealed:true});
+      data.revealed=true;
     }
-  }
+  } else {
+    const state=(await get(ref(db,"state"))).val();
+    let color=colors[state.index]||("Couleur "+(state.index+1));
+    let partner="Partenaire mystère";
 
-  await runTransaction(ref(db,"counter"),v=>(v||0)+1);
+    await set(ref(db,"invites/"+key),{
+      name,color,partner,revealed:true
+    });
+
+    await set(ref(db,"invites/"+keyOf(partner+key)),{
+      name:partner,color,partner:name,revealed:false
+    });
+
+    await set(ref(db,"state"),{waiting:null,index:state.index+1});
+    data={name,color,partner};
+  }
 
   result.style.display="block";
   result.innerHTML=`
     <strong>${data.name}</strong>, ta couleur est :
-    <div style="font-size:1.2rem;font-weight:700;margin:0.3rem 0;">
-      ${data.color}<span class="color-dot"></span>
-    </div>
-    ${data.partner?`🤝 En paire avec <strong>${data.partner}</strong>`:"✨ En solo"}
+    <div style="font-size:1.2rem;font-weight:700;margin:.3rem 0">${data.color}</div>
+    🤝 En paire avec <strong>${data.partner}</strong>
   `;
 };
 </script>

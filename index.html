@@ -1,366 +1,468 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<title>Couleur Soirée</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>Couleur Soirée (Cloud)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* -------- Thème festif clair + confettis + paillettes -------- */
 
-<style>
-/* ---------------------------------------------------------
-   🎉 THEME FESTIF + CONFETTIS + PAILLETTES SCINTILLANTES P1
---------------------------------------------------------- */
+    :root {
+      --bg1: #ffe4e6;
+      --bg2: #fef9c3;
+      --bg3: #e0f2fe;
+      --text: #111827;
+      --muted: #6b7280;
+      --card-bg: rgba(255,255,255,0.88);
+      --card-border: rgba(148,163,184,0.7);
+    }
 
-:root {
-  --bg1: #ffe4e6;
-  --bg2: #fef9c3;
-  --bg3: #e0f2fe;
-  --text: #111827;
-  --muted: #6b7280;
-  --card-bg: rgba(255,255,255,0.85);
-  --card-border: rgba(148,163,184,0.6);
-}
+    * { box-sizing: border-box; }
 
-body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-  color: var(--text);
-  overflow-x: hidden;
-  position: relative;
-  padding: 1.4rem;
-}
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+      padding: 1.4rem;
+    }
 
-/* Confettis animés */
-body::before {
-  content: "";
-  position: fixed;
-  inset: -100px;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(255,0,120,0.4) 0, transparent 55%),
-    radial-gradient(circle at 80% 30%, rgba(0,140,255,0.35) 0, transparent 55%),
-    radial-gradient(circle at 30% 80%, rgba(0,200,140,0.4) 0, transparent 55%),
-    radial-gradient(circle at 70% 75%, rgba(255,210,0,0.4) 0, transparent 55%);
-  background-size: 260px 260px;
-  animation: confettiMove 30s linear infinite alternate;
-  z-index: -2;
-  opacity: 0.7;
-}
+    /* Confettis */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -100px;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,0,120,0.4) 0, transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(0,140,255,0.35) 0, transparent 55%),
+        radial-gradient(circle at 30% 80%, rgba(0,200,140,0.4) 0, transparent 55%),
+        radial-gradient(circle at 70% 75%, rgba(255,210,0,0.4) 0, transparent 55%);
+      background-size: 260px 260px;
+      animation: confettiMove 30s linear infinite alternate;
+      z-index: -2;
+      opacity: 0.75;
+      pointer-events: none;
+    }
 
-@keyframes confettiMove {
-  0% { transform: translate3d(0,0,0); }
-  50% { transform: translate3d(40px,-40px,0); }
-  100% { transform: translate3d(-40px,40px,0); }
-}
+    @keyframes confettiMove {
+      0% { transform: translate3d(0,0,0); }
+      50% { transform: translate3d(40px,-40px,0); }
+      100% { transform: translate3d(-40px,40px,0); }
+    }
 
-/* ✨ Paillettes scintillantes P1 */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,0.8) 0, transparent 60%),
-    radial-gradient(circle, rgba(255,255,255,0.7) 0, transparent 60%),
-    radial-gradient(circle, rgba(255,255,255,0.5) 0, transparent 60%);
-  background-size: 4px 4px, 6px 6px, 3px 3px;
-  mix-blend-mode: lighten;
-  animation: sparkles 3s infinite ease-in-out alternate;
-  z-index: -1;
-  opacity: 0.35;
-}
+    /* Paillettes scintillantes P1 */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.9) 0, transparent 60%),
+        radial-gradient(circle, rgba(255,255,255,0.7) 0, transparent 60%),
+        radial-gradient(circle, rgba(255,255,255,0.5) 0, transparent 60%);
+      background-size: 4px 4px, 6px 6px, 3px 3px;
+      mix-blend-mode: lighten;
+      animation: sparkles 3s infinite ease-in-out alternate;
+      z-index: -1;
+      opacity: 0.3;
+    }
 
-@keyframes sparkles {
-  0% { opacity: 0.25; transform: scale(1); }
-  100% { opacity: 0.45; transform: scale(1.04); }
-}
+    @keyframes sparkles {
+      0% { opacity: 0.22; transform: scale(1); }
+      100% { opacity: 0.45; transform: scale(1.04); }
+    }
 
-/* ---------------------- UI ---------------------- */
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-}
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(90deg,#ec4899,#f59e0b,#10b981,#3b82f6);
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.3rem;
+    }
 
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 1rem;
-  padding: 1.2rem 1.4rem;
-  box-shadow: 0 10px 32px rgba(0,0,0,0.15);
-  backdrop-filter: blur(10px);
-  margin-bottom: 1.4rem;
-}
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
 
-h1 {
-  text-align: center;
-  font-size: 1.9rem;
-  font-weight: 800;
-  background: linear-gradient(90deg,#ec4899,#f59e0b,#10b981,#3b82f6);
-  -webkit-background-clip: text;
-  color: transparent;
-}
+    .card {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      border: 1px solid var(--card-border);
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.18);
+      backdrop-filter: blur(14px);
+    }
 
-.subtitle {
-  text-align: center;
-  color: var(--muted);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
 
-label {
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-  display: block;
-}
+    select, input[type="text"] {
+      width: 100%;
+      border-radius: 0.7rem;
+      border: 1px solid #cbd5e1;
+      padding: 0.55rem 0.7rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+    }
 
-select, input[type=text] {
-  width: 100%;
-  border-radius: 0.7rem;
-  border: 1px solid #cbd5e1;
-  padding: 0.6rem;
-  margin-bottom: 0.8rem;
-  font-size: 1rem;
-}
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 1px #6366f1;
+      background: #ffffff;
+    }
 
-button {
-  padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  color: white;
-  background: linear-gradient(135deg,#6366f1,#ec4899);
-  box-shadow: 0 6px 18px rgba(99,102,241,0.35);
-}
+    button {
+      padding: 0.55rem 1.2rem;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg,#6366f1,#ec4899);
+      box-shadow: 0 8px 20px rgba(99,102,241,0.35);
+      font-size: 0.95rem;
+    }
 
-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
 
-.result-box {
-  background: white;
-  border-radius: 0.8rem;
-  padding: 1rem;
-  border: 1px solid #e2e8f0;
-  margin-top: 1rem;
-  font-size: 1rem;
-}
+    .counter {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #374151;
+      margin-bottom: 1rem;
+    }
 
-.counter {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #374151;
-  margin-bottom: 1rem;
-}
+    .result-box {
+      margin-top: 1rem;
+      background: #ffffff;
+      border-radius: 0.85rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      font-size: 0.95rem;
+    }
 
-.color-dot {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border:1px solid #999;
-  margin-left: 4px;
-}
+    .color-dot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #9ca3af;
+      margin-left: 5px;
+      background: white;
+    }
 
-</style>
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      .card { padding: 1rem 1.1rem; }
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
-  <h1>🎉 Couleur de la Soirée</h1>
-  <p class="subtitle">
-    Trouve ton nom, ta couleur apparaît.  
-    Si tu n’es pas dans la liste, ajoute ton prénom juste en dessous ✨  
-  </p>
+  <div class="container">
+    <h1>🎉 Couleur de la Soirée (Cloud)</h1>
+    <p class="subtitle">
+      Choisis ton prénom dans la liste ou entre ton prénom si tu n’y es pas.  
+      Ta couleur et ta paire sont partagées sur tous les téléphones ✨
+    </p>
 
-  <div id="counter" class="counter">0 personnes ont consulté leur couleur</div>
+    <div id="counter" class="counter">Chargement du compteur…</div>
 
-  <div class="card">
-    <label>Invité(e) dans la liste :</label>
-    <select id="sel">
-      <option value="">— Sélectionnez votre prénom —</option>
-    </select>
+    <div class="card">
+      <label for="sel">Invité(e) dans la liste :</label>
+      <select id="sel">
+        <option value="">— Sélectionne ton prénom —</option>
+      </select>
 
-    <label>Ou entrez votre prénom si vous n’êtes pas dans la liste :</label>
-    <input type="text" id="extra" placeholder="Tape ton prénom ici…" />
+      <label for="extra">Ou entre ton prénom si tu n’es pas dans la liste :</label>
+      <input type="text" id="extra" placeholder="Tape ton prénom ici…" />
 
-    <button id="btn">Voir ma couleur</button>
+      <button id="btn">Voir ma couleur</button>
 
-    <div id="result" class="result-box" style="display:none;"></div>
+      <div id="result" class="result-box" style="display:none;"></div>
+    </div>
   </div>
-</div>
 
-<script>
-/* -----------------------------------------------------------
-   🔐 1) 12 NOMS + PAIRES GÉNÉRÉES ALÉATOIREMENT (INTERNES)
------------------------------------------------------------ */
+  <!-- Firebase via CDN (SDK modular v12) -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js';
+    import {
+      getDatabase,
+      ref,
+      get,
+      set,
+      update,
+      onValue,
+      runTransaction
+    } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js';
 
-const baseNames = [
-  "Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo",
-  "Camille","Anna","Sarah","Charlotte","Marie"
-];
+    // ⚠️ IMPORTANT : mets ICI l’URL exacte de ta Realtime Database.
+    // Tu la vois dans Firebase → Realtime Database → onglet "Data" → "Database URL".
+    // Exemple de format (NE COLLE PAS CET EXEMPLE, UTILISE LE TIEN) :
+    // https://ton-projet-default-rtdb.europe-west1.firebasedatabase.app
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
+      authDomain: "couleur-party-b315b.firebaseapp.com",
+      databaseURL: "https://console.firebase.google.com/project/couleur-party-b315b/database/couleur-party-b315b-default-rtdb/data/~2F",
+      projectId: "couleur-party-b315b",
+      storageBucket: "couleur-party-b315b.firebasestorage.app",
+      messagingSenderId: "420983408934",
+      appId: "1:420983408934:web:ad2c108cb13c480b0f19e7"
+    };
 
-// Génération aléatoire secrète des paires
-function generatePairs(list) {
-  const shuffled = [...list].sort(()=>Math.random()-0.5);
-  const units = [];
-  while(shuffled.length >= 2){
-    units.push([shuffled.pop(), shuffled.pop()]);
-  }
-  if(shuffled.length===1){
-    units.push([shuffled.pop()]);
-  }
-  return units;
-}
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-const baseUnits = generatePairs(baseNames);
+    // ------------- Données de base -------------
 
-// Couleurs disponibles
-const baseColors = [
-  "Rouge Vif","Bleu Électrique","Vert Émeraude","Jaune Soleil",
-  "Orange","Rose Fushia","Violet Profond","Noir","Blanc Pur",
-  "Argenté / Gris Métallique"
-];
+    const baseNames = [
+      "Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo",
+      "Camille","Anna","Sarah","Charlotte","Marie"
+    ];
 
-// Attribution aléatoire d’un coloris pour chaque paire principale
-const assignments = {};
-baseUnits.forEach(unit=>{
-  const color = baseColors[Math.floor(Math.random()*baseColors.length)];
-  if(unit.length===2){
-    assignments[unit[0]] = {color, partner: unit[1], base:true};
-    assignments[unit[1]] = {color, partner: unit[0], base:true};
-  } else {
-    assignments[unit[0]] = {color, partner: null, base:true};
-  }
-});
+    const baseColors = [
+      "Rouge Vif",
+      "Bleu Électrique",
+      "Vert Émeraude",
+      "Jaune Soleil",
+      "Orange",
+      "Rose Fushia",
+      "Violet Profond",
+      "Noir",
+      "Blanc Pur",
+      "Argenté / Gris Métallique"
+    ];
 
-/* -----------------------------------------------------------
-   🔄 2) GESTION DES NOUVEAUX (APRES 12)
------------------------------------------------------------ */
-let extraList = [];
-let extraColorIndex = 0;
+    function normalizeName(name) {
+      return name
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""); // enlève les accents
+    }
 
-function getExtraColorPair() {
-  if(extraColorIndex < baseColors.length){
-    return baseColors[extraColorIndex++];
-  } else {
-    return "Couleur " + (extraColorIndex++ + 1);
-  }
-}
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
 
-/* -----------------------------------------------------------
-   💾 3) PERSISTENCE LOCALE
------------------------------------------------------------ */
+    // Génère des paires aléatoires pour la base (mais tu ne les vois pas 😉)
+    function generateBaseInvites() {
+      const shuffled = shuffle(baseNames);
+      const invites = {};
+      const units = [];
 
-let saved = JSON.parse(localStorage.getItem("SOIREE_DATA") || "{}");
+      while (shuffled.length >= 2) {
+        units.push([shuffled.pop(), shuffled.pop()]);
+      }
+      if (shuffled.length === 1) {
+        units.push([shuffled.pop()]);
+      }
 
-function save() {
-  localStorage.setItem("SOIREE_DATA", JSON.stringify(saved));
-}
+      units.forEach(unit => {
+        const color = baseColors[Math.floor(Math.random()*baseColors.length)];
+        if (unit.length === 2) {
+          const [n1, n2] = unit;
+          const k1 = normalizeName(n1);
+          const k2 = normalizeName(n2);
+          invites[k1] = { name: n1, color, partner: n2 };
+          invites[k2] = { name: n2, color, partner: n1 };
+        } else {
+          const [n1] = unit;
+          const k1 = normalizeName(n1);
+          invites[k1] = { name: n1, color, partner: null };
+        }
+      });
 
-/* -----------------------------------------------------------
-   🎛️ 4) INITIALISATION LISTE DÉROULANTE
------------------------------------------------------------ */
+      return invites;
+    }
 
-const sel = document.getElementById("sel");
-baseNames.forEach(n=>{
-  const opt = document.createElement("option");
-  opt.value = n;
-  opt.textContent = n;
-  sel.appendChild(opt);
-});
+    // ------------- Compteur global -------------
 
-/* -----------------------------------------------------------
-   👁️ 5) AFFICHAGE COMPTEUR
------------------------------------------------------------ */
+    const counterEl = document.getElementById("counter");
 
-function updateCounter() {
-  const c = saved.count || 0;
-  document.getElementById("counter").textContent =
-    c + " personne" + (c>1?"s":"") + " ont consulté leur couleur";
-}
-updateCounter();
+    // Mise à jour en temps réel du compteur
+    onValue(ref(db, "counter"), (snap) => {
+      const c = snap.exists() ? snap.val() : 0;
+      counterEl.textContent = c + " personne" + (c > 1 ? "s ont" : " a") + " consulté sa couleur";
+    });
 
-/* -----------------------------------------------------------
-   🎉 6) BOUTON "VOIR MA COULEUR"
------------------------------------------------------------ */
+    function incrementCounter() {
+      return runTransaction(ref(db, "counter"), (current) => {
+        return (current || 0) + 1;
+      });
+    }
 
-document.getElementById("btn").onclick = ()=>{
-  let name = sel.value || document.getElementById("extra").value.trim();
-  if(!name){
-    alert("Merci d’entrer ou choisir votre prénom.");
-    return;
-  }
+    // ------------- État pour les extras (après les 12) -------------
 
-  // Déjà existant ?
-  if(saved[name]){
-    show(name, saved[name].color, saved[name].partner);
-    saved.count = (saved.count||0)+1;
-    save();
-    updateCounter();
-    return;
-  }
+    async function getState() {
+      const snap = await get(ref(db, "state"));
+      if (!snap.exists()) {
+        return { extraPending: null, nextExtraColorIndex: 0 };
+      }
+      return snap.val();
+    }
 
-  // Base ?
-  if(assignments[name]){
-    saved[name] = assignments[name];
-    saved.count = (saved.count||0)+1;
-    save();
-    updateCounter();
-    show(name, saved[name].color, saved[name].partner);
-    return;
-  }
+    async function saveState(state) {
+      await set(ref(db, "state"), state);
+    }
 
-  // Nouveau venu
-  extraList.push(name);
-  let pairIndex = extraList.length-1;
+    function getExtraColor(idx) {
+      if (idx < baseColors.length) {
+        return baseColors[idx];
+      }
+      // Après la liste, générer Couleur 11, Couleur 12, etc.
+      return "Couleur " + (idx + 1);
+    }
 
-  if(pairIndex % 2 === 1){
-    // paire complète
-    let mate = extraList[pairIndex-1];
-    let color = getExtraColorPair();
+    // ------------- Initialisation de la base dans Firebase -------------
 
-    saved[name] = {color, partner: mate};
-    saved[mate] = {color, partner: name};
+    async function initializeBaseIfNeeded() {
+      const snap = await get(ref(db, "invites"));
+      if (!snap.exists()) {
+        // Première fois : on crée les 12 en base
+        const baseInvites = generateBaseInvites();
+        await set(ref(db, "invites"), baseInvites);
+        await set(ref(db, "state"), { extraPending: null, nextExtraColorIndex: 0 });
+        await set(ref(db, "counter"), 0);
+      }
+    }
 
-  } else {
-    // orphelin temporaire, couleur créée à ce moment
-    let color = getExtraColorPair();
-    saved[name] = {color, partner:null};
-  }
+    // ------------- Gestion des invités -------------
 
-  saved.count = (saved.count||0)+1;
-  save();
-  updateCounter();
-  show(name, saved[name].color, saved[name].partner);
-};
+    async function getInviteByKey(key) {
+      const snap = await get(ref(db, "invites/" + key));
+      return snap.exists() ? snap.val() : null;
+    }
 
-/* -----------------------------------------------------------
-   🎨 7) AFFICHAGE DU RÉSULTAT
------------------------------------------------------------ */
+    async function handleExtraInvite(name, key) {
+      // Lecture de l'état extra
+      let state = await getState();
+      if (!state.extraPending) {
+        // Premier d'une nouvelle paire
+        const idx = state.nextExtraColorIndex || 0;
+        const color = getExtraColor(idx);
+        state.extraPending = { key, name, color };
+        state.nextExtraColorIndex = idx + 1;
 
-function show(name, color, partner){
-  const box = document.getElementById("result");
-  box.style.display = "block";
+        await Promise.all([
+          set(ref(db, "invites/" + key), { name, color, partner: null }),
+          saveState(state)
+        ]);
 
-  box.innerHTML = `
-    <div><strong>${name}</strong>, ta couleur est :</div>
-    <div style="font-size:1.3rem; font-weight:700; margin:0.3rem 0;">
-      ${color}
-      <span class="color-dot" style="background:white;"></span>
-    </div>
-    <div>
-      ${ partner 
-          ? "🤝 Tu es en paire avec <strong>"+partner+"</strong>"
-          : "✨ Tu es en solo (pas de partenaire)" }
-    </div>
-    <div style="margin-top:0.5rem; font-size:0.8rem; color:#555;">
-      Tu peux revenir sur la page : ta couleur ne changera pas.
-    </div>
-  `;
-}
-</script>
+        return { name, color, partner: null };
+      } else {
+        // Deuxième de la paire → on le relie à l'orphelin
+        const pending = state.extraPending;
+        const color = pending.color;
+        state.extraPending = null;
+
+        await Promise.all([
+          set(ref(db, "invites/" + key), { name, color, partner: pending.name }),
+          update(ref(db, "invites/" + pending.key), { partner: name }),
+          saveState(state)
+        ]);
+
+        return { name, color, partner: pending.name };
+      }
+    }
+
+    // ------------- UI -------------
+
+    const sel = document.getElementById("sel");
+    const extraInput = document.getElementById("extra");
+    const btn = document.getElementById("btn");
+    const resultBox = document.getElementById("result");
+
+    // Remplir la liste déroulante avec les 12 noms de base
+    function fillSelect() {
+      baseNames.forEach(n => {
+        const opt = document.createElement("option");
+        opt.value = n;
+        opt.textContent = n;
+        sel.appendChild(opt);
+      });
+    }
+
+    function showResult(displayName, color, partner) {
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `
+        <div><strong>${displayName}</strong>, ta couleur pour la soirée est :</div>
+        <div style="font-size:1.3rem;font-weight:700;margin:0.3rem 0;">
+          ${color}
+          <span class="color-dot"></span>
+        </div>
+        <div>
+          ${
+            partner
+              ? "🤝 Tu es en paire avec <strong>" + partner + "</strong>."
+              : "✨ Tu es en solo, sans partenaire attitré."
+          }
+        </div>
+        <div style="margin-top:0.5rem;font-size:0.8rem;color:#6b7280;">
+          Cette info est enregistrée dans le cloud : tu retrouveras la même couleur
+          depuis n’importe quel téléphone en entrant le même prénom.
+        </div>
+      `;
+    }
+
+    btn.addEventListener("click", async () => {
+      let rawName = sel.value || extraInput.value.trim();
+      if (!rawName) {
+        alert("Merci de sélectionner ou d’entrer ton prénom.");
+        return;
+      }
+
+      const key = normalizeName(rawName);
+      let invite = await getInviteByKey(key);
+
+      if (!invite) {
+        // Nouveau nom → traitement extra
+        invite = await handleExtraInvite(rawName, key);
+      }
+
+      // On incrémente le compteur une seule fois par clic
+      await incrementCounter();
+
+      showResult(invite.name || rawName, invite.color, invite.partner || null);
+    });
+
+    // ------------- Lancement -------------
+
+    (async () => {
+      try {
+        await initializeBaseIfNeeded();
+        fillSelect();
+      } catch (e) {
+        console.error("Erreur d'initialisation Firebase :", e);
+        counterEl.textContent = "Erreur de connexion à la base (Firebase).";
+      }
+    })();
+  </script>
 </body>
 </html>

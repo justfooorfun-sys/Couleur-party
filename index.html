@@ -22,10 +22,7 @@ body{
   padding:1.5rem;
 }
 .container{width:100%;max-width:720px}
-<div style="text-align:center;margin-bottom:1rem;">
-  <img src="logo.png" alt="Logo" style="width:90px;height:auto;">
-</div>
-  h1{color:white;text-align:center;font-weight:800;margin:0.3rem 0}
+h1{color:white;text-align:center;font-weight:800;margin:0.3rem 0}
 .subtitle{text-align:center;color:#cbd5f5;margin-bottom:1.3rem}
 .card{
   background:var(--card);
@@ -75,6 +72,7 @@ button{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getDatabase, ref, get, set, update, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
+/* 🔥 CONFIG FIREBASE */
 const firebaseConfig={
   apiKey:"AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
   authDomain:"couleur-party-b315b.firebaseapp.com",
@@ -88,6 +86,7 @@ const firebaseConfig={
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
 
+/* BASE */
 const baseNames=["Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo","Camille","Anna","Sarah","Charlotte","Marie"];
 const colors=["Rouge Vif","Bleu Électrique","Vert Émeraude","Jaune Soleil","Orange","Rose Fushia","Violet Profond","Noir","Blanc Pur","Argenté"];
 
@@ -96,6 +95,7 @@ const input=document.getElementById("inputName");
 const result=document.getElementById("result");
 const counter=document.getElementById("counter");
 
+/* init select */
 baseNames.forEach(n=>{
   const o=document.createElement("option");
   o.value=n;o.textContent=n;
@@ -104,10 +104,10 @@ baseNames.forEach(n=>{
 
 const keyOf=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-/* INIT BASE */
+/* INIT FIREBASE DATA */
 async function init(){
-  const snap=await get(ref(db,"invites"));
-  if(!snap.exists()){
+  const invSnap=await get(ref(db,"invites"));
+  if(!invSnap.exists()){
     let shuffled=[...baseNames].sort(()=>Math.random()-0.5);
     let invites={};
     while(shuffled.length>=2){
@@ -117,12 +117,12 @@ async function init(){
       invites[keyOf(b)]={name:b,color:c,partner:a,revealed:false};
     }
     await set(ref(db,"invites"),invites);
-    await set(ref(db,"extras"),{pending:null,pendingColor:null});
+    await set(ref(db,"extras"),{pending:null,color:null});
   }
 }
 init();
 
-/* COUNTER */
+/* COUNTER = revealed only */
 onValue(ref(db,"invites"),snap=>{
   if(!snap.exists()) return;
   const n=Object.values(snap.val()).filter(v=>v.revealed).length;
@@ -131,52 +131,54 @@ onValue(ref(db,"invites"),snap=>{
 });
 
 /* ACTION */
-btn.onclick=async()=>{
-  const name=select.value||input.value.trim();
-  if(!name) return alert("Entre ton prénom");
+document.getElementById("btn").onclick=async()=>{
+  try{
+    const name=select.value||input.value.trim();
+    if(!name) return alert("Entre ton prénom");
 
-  const key=keyOf(name);
-  const snap=await get(ref(db,"invites/"+key));
+    const key=keyOf(name);
+    const snap=await get(ref(db,"invites/"+key));
 
-  let data;
-  if(snap.exists()){
-    data=snap.val();
-    if(!data.revealed){
-      await update(ref(db,"invites/"+key),{revealed:true});
-      data.revealed=true;
-    }
-  } else {
-    const extraSnap=await get(ref(db,"extras"));
-    const state=extraSnap.val();
-
-    if(!state.pending){
-      const color=colors[Math.floor(Math.random()*colors.length)];
-      await set(ref(db,"invites/"+key),{
-        name,color,partner:null,revealed:true
-      });
-      await set(ref(db,"extras"),{pending:key,pendingColor:color});
-      data={name,color,partner:null};
+    let data;
+    if(snap.exists()){
+      data=snap.val();
+      if(!data.revealed){
+        await update(ref(db,"invites/"+key),{revealed:true});
+        data.revealed=true;
+      }
     } else {
-      const partnerKey=state.pending;
-      const color=state.pendingColor;
-      const partnerSnap=await get(ref(db,"invites/"+partnerKey));
-      const partnerName=partnerSnap.val().name;
+      const extraSnap=await get(ref(db,"extras"));
+      const state=extraSnap.exists()?extraSnap.val():{pending:null,color:null};
 
-      await update(ref(db,"invites/"+partnerKey),{partner:name});
-      await set(ref(db,"invites/"+key),{
-        name,color,partner:partnerName,revealed:true
-      });
-      await set(ref(db,"extras"),{pending:null,pendingColor:null});
-      data={name,color,partner:partnerName};
+      if(!state.pending){
+        const color=colors[Math.floor(Math.random()*colors.length)];
+        await set(ref(db,"invites/"+key),{
+          name,color,partner:null,revealed:true
+        });
+        await set(ref(db,"extras"),{pending:key,color});
+        data={name,color,partner:null};
+      } else {
+        const partnerSnap=await get(ref(db,"invites/"+state.pending));
+        const partnerName=partnerSnap.val().name;
+        await update(ref(db,"invites/"+state.pending),{partner:name});
+        await set(ref(db,"invites/"+key),{
+          name,color:state.color,partner:partnerName,revealed:true
+        });
+        await set(ref(db,"extras"),{pending:null,color:null});
+        data={name,color:state.color,partner:partnerName};
+      }
     }
-  }
 
-  result.style.display="block";
-  result.innerHTML=`
-    <strong>${data.name}</strong>, ta couleur est :
-    <div style="font-size:1.2rem;font-weight:700;margin:.3rem 0">${data.color}</div>
-    ${data.partner?`🤝 En paire avec <strong>${data.partner}</strong>`:"✨ En attente de partenaire"}
-  `;
+    result.style.display="block";
+    result.innerHTML=`
+      <strong>${data.name}</strong>, ta couleur est :
+      <div style="font-size:1.2rem;font-weight:700;margin:.3rem 0">${data.color}</div>
+      ${data.partner?`🤝 En paire avec <strong>${data.partner}</strong>`:"✨ En attente de partenaire"}
+    `;
+  } catch(e){
+    alert("Erreur : "+e.message);
+    console.error(e);
+  }
 };
 </script>
 </body>

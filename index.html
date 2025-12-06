@@ -1,494 +1,119 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Couleur de la soirée</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<title>Couleur de la soirée</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Favicon / logo onglet (mets un fichier logo.png dans le repo) -->
-  <link rel="icon" type="image/png" href="logo.png" />
+<link rel="icon" type="image/png" href="logo.png">
 
-  <style>
-    :root {
-      --bg1: #0f172a;
-      --bg2: #020617;
-      --card-bg: #020617;
-      --card-border: #1f2937;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --accent: #6366f1;
-      --accent2: #ec4899;
-    }
+<style>
+:root{
+  --bg1:#0f172a;
+  --bg2:#020617;
+  --card:#0b1220;
+  --border:#1f2937;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#6366f1;
+}
+*{box-sizing:border-box}
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0, var(--bg2) 55%);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 1.25rem;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    .logo {
-      display: block;
-      margin: 0 auto 0.5rem auto;
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
-      object-fit: cover;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin: 0.25rem 0 0.4rem 0;
-      background: linear-gradient(90deg, #f97316, #22c55e, #3b82f6, #ec4899);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .subtitle {
-      text-align: center;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 1.1rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 1rem;
-      border: 1px solid var(--card-border);
-      padding: 1.1rem 1.2rem;
-      box-shadow: 0 18px 35px rgba(0,0,0,0.6);
-    }
-
-    .counter {
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 0.8rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    select, input[type="text"] {
-      width: 100%;
-      border-radius: 0.6rem;
-      border: 1px solid #4b5563;
-      background: #020617;
-      color: var(--text-main);
-      padding: 0.5rem 0.7rem;
-      font-size: 0.92rem;
-      margin-bottom: 0.75rem;
-    }
-
-    select:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent);
-    }
-
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      border-radius: 999px;
-      border: none;
-      padding: 0.55rem 1.3rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 12px 30px rgba(37,99,235,0.45);
-    }
-
-    button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .result-box {
-      margin-top: 0.9rem;
-      background: #020617;
-      border-radius: 0.8rem;
-      border: 1px solid #374151;
-      padding: 0.9rem 1rem;
-      font-size: 0.95rem;
-    }
-
-    .color-highlight {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin: 0.4rem 0;
-    }
-
-    .color-dot {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      border: 1px solid #9ca3af;
-      margin-left: 5px;
-      background: #020617;
-    }
-
-    .small {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 0.4rem;
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 1rem; }
-      .card { padding: 1rem 1rem; }
-    }
-  </style>
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#1e293b,var(--bg2));
+  font-family:system-ui,-apple-system;
+  display:flex;
+  justify-content:center;
+  padding:1.3rem;
+  color:var(--text);
+}
+.container{width:100%;max-width:480px}
+h1{
+  text-align:center;
+  font-weight:900;
+  margin:.4rem 0 .2rem;
+  background:linear-gradient(90deg,#f97316,#22c55e,#3b82f6,#ec4899);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.subtitle{
+  text-align:center;
+  font-size:.88rem;
+  color:var(--muted);
+  margin-bottom:1rem;
+}
+.counter{
+  text-align:center;
+  font-size:.85rem;
+  color:var(--muted);
+  margin-bottom:.7rem;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:1rem;
+  padding:1.1rem;
+  box-shadow:0 20px 40px rgba(0,0,0,.55);
+}
+label{
+  display:block;
+  font-weight:600;
+  font-size:.9rem;
+  margin-bottom:.25rem;
+}
+select,input{
+  width:100%;
+  background:#020617;
+  color:var(--text);
+  border:1px solid #334155;
+  border-radius:.6rem;
+  padding:.55rem .7rem;
+  margin-bottom:.75rem;
+}
+button{
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:.6rem;
+  background:linear-gradient(135deg,#6366f1,#4338ca);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+.result{
+  margin-top:1rem;
+  background:#020617;
+  border:1px solid #334155;
+  border-radius:.75rem;
+  padding:.9rem;
+}
+.big{
+  font-size:1.2rem;
+  font-weight:800;
+}
+.small{
+  font-size:.8rem;
+  color:var(--muted);
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <!-- Logo optionnel (mettre logo.png dans le repo) -->
-    <!-- <img src="logo.png" alt="Logo soirée" class="logo" /> -->
+<div class="container">
+<h1>Couleur de la soirée</h1>
+<p class="subtitle">Entre ton prénom pour découvrir ta couleur 🎉</p>
+<div id="counter" class="counter">Chargement…</div>
 
-    <h1>Couleur de la soirée</h1>
-    <p class="subtitle">
-      Choisis ton prénom dans la liste ou entre ton prénom si tu n’y es pas.  
-      Ta couleur et ta paire seront les mêmes sur tous les téléphones.
-    </p>
+<div class="card">
+<label>Prénom dans la liste</label>
+<select id="sel">
+<option value="">— Sélectionne ton prénom —</option>
+</select>
 
-    <div id="counter" class="counter">Chargement…</div>
+<label>Ou entre ton prénom</label>
+<input id="extra" placeholder="Ton prénom">
 
-    <div class="card">
-      <label for="sel">Invité(e) dans la liste :</label>
-      <select id="sel">
-        <option value="">— Sélectionne ton prénom —</option>
-      </select>
-
-      <label for="extra">Ou entre ton prénom si tu n’es pas dans la liste :</label>
-      <input id="extra" type="text" placeholder="Tape ton prénom ici…" />
-
-      <button id="btn">Voir ma couleur</button>
-
-      <div id="result" class="result-box" style="display:none;"></div>
-    </div>
-  </div>
-
-  <!-- Firebase en module (CDN) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getDatabase,
-      ref,
-      get,
-      set,
-      update,
-      onValue,
-      runTransaction
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-    // ⚠️ Config spécifique à TON projet
-    const firebaseConfig = {
-      apiKey: "AIzaSyAoeP4PnoI2_sBTiDvfadJ4kewngGbkkDo",
-      authDomain: "couleur-party-b315b.firebaseapp.com",
-      databaseURL: "https://couleur-party-b315b-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "couleur-party-b315b",
-      storageBucket: "couleur-party-b315b.firebasestorage.app",
-      messagingSenderId: "420983408934",
-      appId: "1:420983408934:web:ad2c108cb13c480b0f19e7"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // -------- Données de base --------
-
-    const baseNames = [
-      "Léo","Aurélien","Julien","Thomas","Rémi","Joris T","Roméo",
-      "Camille","Anna","Sarah","Charlotte","Marie"
-    ];
-
-    const baseColors = [
-      "Rouge Vif",
-      "Bleu Électrique",
-      "Vert Émeraude",
-      "Jaune Soleil",
-      "Orange",
-      "Rose Fushia",
-      "Violet Profond",
-      "Noir",
-      "Blanc Pur",
-      "Argenté / Gris Métallique"
-    ];
-
-    function normalizeName(name) {
-      return name
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, ""); // enlève accents
-    }
-
-    function shuffle(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    // -------- Initialisation dans Firebase (une seule fois) --------
-
-    async function ensureInitialized() {
-      const metaSnap = await get(ref(db, "meta/initialized"));
-      if (metaSnap.exists() && metaSnap.val() === true) {
-        return;
-      }
-
-      // 1) On tire un ordre aléatoire pour les couleurs (utile aussi pour les extras)
-      const colorOrder = shuffle(baseColors);
-
-      // 2) On tire des paires pour les 12 noms de base
-      const shuffledNames = shuffle(baseNames);
-      const units = [];
-      while (shuffledNames.length >= 2) {
-        units.push([shuffledNames.pop(), shuffledNames.pop()]);
-      }
-      if (shuffledNames.length === 1) {
-        units.push([shuffledNames.pop()]); // orphelin
-      }
-
-      const invites = {};
-      let colorIndex = 0; // index dans colorOrder pour les paires de base
-
-      units.forEach(unit => {
-        if (colorIndex >= colorOrder.length) {
-          throw new Error("Pas assez de couleurs pour les paires de base.");
-        }
-        const color = colorOrder[colorIndex++];
-        if (unit.length === 2) {
-          const [n1, n2] = unit;
-          const k1 = normalizeName(n1);
-          const k2 = normalizeName(n2);
-          invites[k1] = { name: n1, color, partner: n2 };
-          invites[k2] = { name: n2, color, partner: n1 };
-        } else {
-          const [n] = unit;
-          const k = normalizeName(n);
-          invites[k] = { name: n, color, partner: null };
-        }
-      });
-
-      // 3) Écritures dans Firebase
-      await set(ref(db, "invites"), invites);
-      await set(ref(db, "colorOrder"), colorOrder);
-      // nextColorIndex = nombre de couleurs déjà utilisées pour les paires de base
-      await set(ref(db, "state"), {
-        nextColorIndex: colorIndex,
-        pendingExtra: null
-      });
-      await set(ref(db, "revealed"), {});       // qui a révélé
-      await set(ref(db, "revealedCount"), 0);   // compteur
-      await set(ref(db, "meta/initialized"), true);
-    }
-
-    // -------- Compteur global des révélations --------
-
-    const counterEl = document.getElementById("counter");
-
-    onValue(ref(db, "revealedCount"), snap => {
-      const c = snap.exists() ? snap.val() : 0;
-      if (c === 0) {
-        counterEl.textContent = "Aucune personne n’a encore révélé sa couleur";
-      } else if (c === 1) {
-        counterEl.textContent = "1 personne a révélé sa couleur";
-      } else {
-        counterEl.textContent = c + " personnes ont révélé leur couleur";
-      }
-    });
-
-    async function markRevealedOnce(key) {
-      const alreadySnap = await get(ref(db, "revealed/" + key));
-      if (alreadySnap.exists()) {
-        return; // déjà compté
-      }
-      // On marque comme révélé
-      await set(ref(db, "revealed/" + key), true);
-      // On incrémente le compteur global
-      await runTransaction(ref(db, "revealedCount"), current => {
-        return (current || 0) + 1;
-      });
-    }
-
-    // -------- Gestion des invités & couleurs --------
-
-    async function getInviteByKey(key) {
-      const snap = await get(ref(db, "invites/" + key));
-      return snap.exists() ? snap.val() : null;
-    }
-
-    async function handleExtraInvite(rawName, key) {
-      // Récupérer état global
-      const stateSnap = await get(ref(db, "state"));
-      const colorsSnap = await get(ref(db, "colorOrder"));
-      if (!colorsSnap.exists()) throw new Error("colorOrder manquant en base.");
-
-      const colorOrder = colorsSnap.val();
-      let state = stateSnap.exists()
-        ? stateSnap.val()
-        : { nextColorIndex: 0, pendingExtra: null };
-
-      let { nextColorIndex, pendingExtra } = state;
-
-      if (!pendingExtra) {
-        // Premier d’une nouvelle paire d’extra
-        if (nextColorIndex >= colorOrder.length) {
-          throw new Error("Toutes les couleurs ont déjà été utilisées (2 personnes max par couleur).");
-        }
-        const color = colorOrder[nextColorIndex];
-
-        // On réserve cette couleur pour cette paire
-        pendingExtra = {
-          key,
-          name: rawName,
-          colorIndex: nextColorIndex
-        };
-        nextColorIndex += 1;
-
-        // On enregistre l’invité comme solo pour l’instant
-        await Promise.all([
-          set(ref(db, "invites/" + key), {
-            name: rawName,
-            color,
-            partner: null
-          }),
-          set(ref(db, "state"), {
-            nextColorIndex,
-            pendingExtra
-          })
-        ]);
-
-        return { name: rawName, color, partner: null };
-      } else {
-        // Deuxième de la paire → même couleur que le pending
-        const color = colorOrder[pendingExtra.colorIndex];
-        const partnerKey = pendingExtra.key;
-        const partnerName = pendingExtra.name;
-
-        // On enregistre le nouveau
-        // et on met à jour le partner
-        await Promise.all([
-          set(ref(db, "invites/" + key), {
-            name: rawName,
-            color,
-            partner: partnerName
-          }),
-          update(ref(db, "invites/" + partnerKey), {
-            partner: rawName
-          }),
-          set(ref(db, "state"), {
-            nextColorIndex,
-            pendingExtra: null
-          })
-        ]);
-
-        return { name: rawName, color, partner: partnerName };
-      }
-    }
-
-    // -------- UI --------
-
-    const sel = document.getElementById("sel");
-    const extraInput = document.getElementById("extra");
-    const btn = document.getElementById("btn");
-    const resultBox = document.getElementById("result");
-
-    // remplir la liste déroulante avec les 12 prénoms
-    function fillSelect() {
-      baseNames.forEach(n => {
-        const opt = document.createElement("option");
-        opt.value = n;
-        opt.textContent = n;
-        sel.appendChild(opt);
-      });
-    }
-
-    function showResult(displayName, color, partner) {
-      resultBox.style.display = "block";
-      resultBox.innerHTML = `
-        <div>Bonjour <strong>${displayName}</strong> 👋</div>
-        <div class="color-highlight">
-          Ta couleur pour la soirée est : ${color}
-          <span class="color-dot"></span>
-        </div>
-        <div>
-          ${
-            partner
-              ? `🤝 Tu es en paire avec <strong>${partner}</strong>.`
-              : `✨ Pour cette couleur, tu es pour l’instant sans partenaire attitré.`
-          }
-        </div>
-        <div class="small">
-          Tu peux revenir sur cette page plus tard : ta couleur restera la même
-          en entrant le même prénom.
-        </div>
-      `;
-    }
-
-    btn.addEventListener("click", async () => {
-      let rawName = sel.value || extraInput.value.trim();
-      if (!rawName) {
-        alert("Merci de sélectionner ou d’entrer ton prénom.");
-        return;
-      }
-
-      const key = normalizeName(rawName);
-      let invite = await getInviteByKey(key);
-
-      if (!invite) {
-        // Nouveau prénom → extra
-        try {
-          invite = await handleExtraInvite(rawName, key);
-        } catch (e) {
-          alert(e.message || "Erreur lors de l’attribution de la couleur.");
-          return;
-        }
-      }
-
-      // On compte cette personne comme ayant révélé sa couleur (une seule fois max)
-      await markRevealedOnce(key);
-
-      showResult(invite.name || rawName, invite.color, invite.partner || null);
-    });
-
-    // -------- Lancement --------
-    (async () => {
-      try {
-        await ensureInitialized();
-        fillSelect();
-      } catch (e) {
-        console.error("Erreur d’init Firebase :", e);
-        counterEl.textContent = "Erreur de connexion à la base (Firebase).";
-      }
-    })();
-  </script>
-</body>
-</html>
+<button id="btn">Voir ma couleur</button>
+<div id="result" class="result" style="display

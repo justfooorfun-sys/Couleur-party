@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Couleur de la soirée</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
 :root{
   --bg1:#0f172a;
@@ -12,100 +11,47 @@
   --card:#ffffff;
   --accent:#6366f1;
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   min-height:100vh;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  font-family:system-ui,-apple-system;
   display:flex;
   justify-content:center;
   padding:1.5rem;
-  color:#020617
 }
-
 .container{width:100%;max-width:720px}
-
-h1{
-  text-align:center;
-  font-size:1.8rem;
-  font-weight:800;
-  color:white;
-  margin-bottom:.3rem
-}
-
-.subtitle{
-  text-align:center;
-  color:#cbd5f5;
-  font-size:.95rem;
-  margin-bottom:1.5rem
-}
-
+h1{color:white;text-align:center;font-weight:800;margin:0.3rem 0}
+.subtitle{text-align:center;color:#cbd5f5;margin-bottom:1.3rem}
 .card{
   background:var(--card);
   border-radius:1.2rem;
   padding:1.4rem 1.6rem;
-  box-shadow:0 25px 55px rgba(0,0,0,.45)
+  box-shadow:0 20px 50px rgba(0,0,0,.45)
 }
-
-.counter{
-  text-align:center;
-  font-size:.85rem;
-  color:#cbd5f5;
-  margin-bottom:1rem
-}
-
-label{font-weight:600;font-size:.9rem;margin-bottom:.3rem;display:block}
-
+.counter{text-align:center;color:#cbd5f5;font-size:.9rem;margin-bottom:1rem}
+label{font-weight:600;display:block;margin-bottom:.3rem}
 select,input{
-  width:100%;
-  padding:.55rem .7rem;
-  border-radius:.7rem;
-  border:1px solid #cbd5e1;
-  margin-bottom:.9rem;
-  font-size:.95rem
+  width:100%;padding:.55rem .7rem;border-radius:.7rem;
+  border:1px solid #cbd5e1;margin-bottom:.9rem
 }
-
-select:focus,input:focus{
-  outline:none;
-  border-color:var(--accent);
-  box-shadow:0 0 0 1px var(--accent)
-}
-
 button{
-  width:100%;
-  padding:.7rem;
-  border-radius:999px;
-  border:none;
-  font-weight:700;
+  width:100%;padding:.7rem;border-radius:999px;
   background:linear-gradient(135deg,#6366f1,#4338ca);
-  color:white;
-  cursor:pointer;
-  box-shadow:0 10px 28px rgba(99,102,241,.45)
+  color:white;border:none;font-weight:700;cursor:pointer
 }
-
 .result{
-  margin-top:1rem;
-  background:#f8fafc;
-  border-radius:.9rem;
-  padding:1rem;
-  border:1px solid #e5e7eb;
-  font-size:.95rem
+  margin-top:1rem;background:#f8fafc;
+  border:1px solid #e5e7eb;border-radius:.9rem;padding:1rem
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-
 <h1>🎉 Couleur de la soirée</h1>
-<p class="subtitle">
-Choisis ton prénom ou saisis-le pour découvrir ta couleur.<br>
-Tu peux revenir plus tard : elle ne changera pas.
-</p>
-
+<p class="subtitle">Choisis ton prénom ou saisis-le pour découvrir ta couleur</p>
 <div id="counter" class="counter">Chargement…</div>
 
 <div class="card">
@@ -118,7 +64,6 @@ Tu peux revenir plus tard : elle ne changera pas.
 <input id="inputName" placeholder="Ton prénom">
 
 <button id="btn">Voir ma couleur</button>
-
 <div id="result" class="result" style="display:none;"></div>
 </div>
 </div>
@@ -156,33 +101,28 @@ baseNames.forEach(n=>{
 
 const keyOf=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-/* INIT UNIQUE : PAIRES TIRÉES À L’AVANCE */
+/* INIT BASE */
 async function init(){
   const snap=await get(ref(db,"invites"));
   if(!snap.exists()){
     let shuffled=[...baseNames].sort(()=>Math.random()-0.5);
     let invites={};
-
     while(shuffled.length>=2){
       const a=shuffled.pop(),b=shuffled.pop();
       const c=colors[Math.floor(Math.random()*colors.length)];
       invites[keyOf(a)]={name:a,color:c,partner:b,revealed:false};
       invites[keyOf(b)]={name:b,color:c,partner:a,revealed:false};
     }
-
     await set(ref(db,"invites"),invites);
+    await set(ref(db,"extras"),{pending:null,pendingColor:null});
   }
 }
 init();
 
-/* COMPTEUR : révélés uniquement */
+/* COUNTER */
 onValue(ref(db,"invites"),snap=>{
-  if(!snap.exists()){
-    counter.textContent="0 personne n’a révélé sa couleur";
-    return;
-  }
-  const vals=Object.values(snap.val());
-  const n=vals.filter(v=>v.revealed).length;
+  if(!snap.exists()) return;
+  const n=Object.values(snap.val()).filter(v=>v.revealed).length;
   counter.textContent=
     n+" personne"+(n>1?"s ont révélé leur couleur":" a révélé sa couleur");
 });
@@ -194,18 +134,45 @@ btn.onclick=async()=>{
 
   const key=keyOf(name);
   const snap=await get(ref(db,"invites/"+key));
-  if(!snap.exists()) return alert("Ton prénom n’a pas encore été associé à une paire.");
 
-  const data=snap.val();
-  if(!data.revealed){
-    await update(ref(db,"invites/"+key),{revealed:true});
+  let data;
+  if(snap.exists()){
+    data=snap.val();
+    if(!data.revealed){
+      await update(ref(db,"invites/"+key),{revealed:true});
+      data.revealed=true;
+    }
+  } else {
+    const extraSnap=await get(ref(db,"extras"));
+    const state=extraSnap.val();
+
+    if(!state.pending){
+      const color=colors[Math.floor(Math.random()*colors.length)];
+      await set(ref(db,"invites/"+key),{
+        name,color,partner:null,revealed:true
+      });
+      await set(ref(db,"extras"),{pending:key,pendingColor:color});
+      data={name,color,partner:null};
+    } else {
+      const partnerKey=state.pending;
+      const color=state.pendingColor;
+      const partnerSnap=await get(ref(db,"invites/"+partnerKey));
+      const partnerName=partnerSnap.val().name;
+
+      await update(ref(db,"invites/"+partnerKey),{partner:name});
+      await set(ref(db,"invites/"+key),{
+        name,color,partner:partnerName,revealed:true
+      });
+      await set(ref(db,"extras"),{pending:null,pendingColor:null});
+      data={name,color,partner:partnerName};
+    }
   }
 
   result.style.display="block";
   result.innerHTML=`
     <strong>${data.name}</strong>, ta couleur est :
     <div style="font-size:1.2rem;font-weight:700;margin:.3rem 0">${data.color}</div>
-    🤝 En paire avec <strong>${data.partner}</strong>
+    ${data.partner?`🤝 En paire avec <strong>${data.partner}</strong>`:"✨ En attente de partenaire"}
   `;
 };
 </script>
